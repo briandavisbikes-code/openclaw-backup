@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TruckPedia.net API</title>
+  <meta name="description" content="The truck data API for developers. 25,034 unique trucks (1940-2026) with specs, towing, fuel economy, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-tertiary: #1a1a25;
+      --text-primary: #f5f5f7;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #f97316;
+      --accent-hover: #ea580c;
+      --accent-dim: rgba(249,115,22,0.15);
+      --border: #27272a;
+      --code-bg: #18181b;
+      --success: #22c55e;
+      --error: #ef4444;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .logo span { color: var(--accent); }
+    .logo .brand { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text-primary); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--accent-hover); }
+
+    /* Hero */
+    .hero {
+      padding: 100px 0 80px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .hero-badge span { color: var(--accent); }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 64px);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-secondary);
+      border-color: var(--text-muted);
+    }
+
+    /* Code Preview */
+    .code-preview {
+      background: #ffffff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 60px;
+      text-align: left;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      overflow-x: auto;
+    }
+
+    .code-preview pre {
+      font-family: 'SF Mono','Fira Code',Consolas,monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #333333;
+    }
+
+    .code-preview .keyword { color: #8957e5; }
+    .code-preview .string { color: #22863a; }
+    .code-preview .property { color: #6f42c1; }
+    .code-preview .comment { color: #6a737d; }
+
+    /* Stats */
+    .stats {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+
+    .stat h3 {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .stat p { color: var(--text-secondary); font-size: 15px; }
+
+    /* Free Lookup Search */
+    .lookup {
+      padding: 100px 0;
+    }
+
+    .lookup .section-header { margin-bottom: 48px; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-header h2 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .section-header p { color: var(--text-secondary); font-size: 18px; }
+
+    .search-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 60px;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 100;
+    }
+
+    .search-box h3 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-box h3 .free-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--accent-dim);
+      color: var(--accent);
+      padding: 2px 10px;
+      border-radius: 100px;
+      border: 1px solid rgba(249,115,22,0.3);
+    }
+
+    .search-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .search-form select,
+    .search-form button {
+      height: 48px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .search-form select {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 0 14px;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      transition: border-color 0.2s;
+    }
+
+    .search-form select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .search-form select:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .search-form button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0 24px;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .search-form button:hover { background: var(--accent-hover); }
+    .search-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .search-hint {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Result Card */
+    #result-area {
+      margin-top: 32px;
+      display: none;
+    }
+
+    #result-area.visible { display: block; }
+
+    .result-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-header h4 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .result-header .year-badge {
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--accent-dim);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+
+    .result-body {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .result-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .result-field span {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .result-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .result-footer .tier-note {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .result-footer .tier-note strong { color: var(--accent); }
+
+    .result-footer .cta-small {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(249,115,22,0.3);
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: var(--accent-dim);
+      transition: all 0.2s;
+    }
+
+    .result-footer .cta-small:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* Not Found */
+    .not-found {
+      text-align: center;
+      padding: 40px 24px;
+      color: var(--text-muted);
+    }
+
+    .not-found .emoji {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .not-found h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .not-found p { font-size: 14px; }
+
+    /* Error */
+    .result-error {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 12px;
+      padding: 20px 24px;
+      text-align: center;
+      color: var(--error);
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    /* Features */
+    .features { padding: 100px 0; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-tertiary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* API Preview */
+    .api-preview {
+      padding: 80px 0;
+      background: var(--bg-secondary);
+    }
+
+    .api-preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .api-preview h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .api-preview > .container > div:first-child p {
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .api-preview pre {
+      background: #ffffff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 24px;
+      font-family: 'SF Mono','Fira Code',Consolas,monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: auto;
+      color: #333333;
+    }
+
+    /* Pricing */
+    .pricing { padding: 100px 0; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      position: relative;
+    }
+
+    .pricing-card.popular {
+      border-color: var(--accent);
+    }
+
+    .pricing-card.popular::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #fff;
+      padding: 4px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .pricing-card h3 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pricing-card .price {
+      font-size: 40px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .pricing-card .price span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .pricing-card .description {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+
+    .pricing-features li {
+      padding: 10px 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .pricing-cta {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border);
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .pricing-cta:hover { background: var(--bg-primary); }
+
+    .pricing-card.popular .pricing-cta {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .pricing-card.popular .pricing-cta:hover { background: var(--accent-hover); }
+
+    /* Data Coverage */
+    .coverage {
+      padding: 80px 0;
+      background: var(--bg-secondary);
+    }
+
+    .coverage-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+
+    .coverage-item h4 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .coverage-item p {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 100px 0;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      color: var(--text-secondary);
+      font-size: 18px;
+      margin-bottom: 32px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--text-secondary); }
+
+    .footer-copy { color: var(--text-muted); font-size: 14px; }
+
+    /* Mobile */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .coverage-grid { grid-template-columns: repeat(3, 1fr); }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .api-preview-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .search-form {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .search-form button {
+        grid-column: span 2;
+      }
+
+      .result-body {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .coverage-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-grid { grid-template-columns: 1fr; }
+
+      .hero { padding: 60px 0 40px; }
+      .hero h1 { font-size: 32px; }
+      .hero p { font-size: 16px; }
+
+      .stat h3 { font-size: 32px; }
+      .stats-grid { gap: 24px; }
+
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .search-box { padding: 24px; }
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Docs / Pricing nav highlighting */
+    .page-docs .nav-links li:nth-child(1) a,
+    .page-pricing .nav-links li:nth-child(2) a {
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <a href="/" class="logo">Truck<span class="brand">Pedia</span>.net</a>
+        <ul class="nav-links">
+          <li><a href="/" id="nav-home">Home</a></li>
+          <li><a href="/api/docs" id="nav-docs">Documentation</a></li>
+          <li><a href="#pricing" id="nav-pricing">Pricing</a></li>
+        </ul>
+        <a href="#get-started" class="nav-cta">Get API Key</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span>25,034</span> trucks and growing &bull; <span>1940–2026</span>
+      </div>
+      <h1>The Truck Data API<br>for Developers</h1>
+      <p>Complete specifications, towing capacity, fuel economy, and more. One endpoint. Any truck. Any application.</p>
+      <div class="hero-actions">
+        <a href="/api/docs" class="btn-primary">Read the Docs →</a>
+        <a href="#get-started" class="btn-secondary">Free Lookup</a>
+      </div>
+      <div class="code-preview">
+        <pre><span class="comment"># Free tier — no auth required</span>
+<span class="keyword">GET</span> https://api.truckpedia.net/api/truck?make=Ford&model=F-150&year=2022
+
+<span class="comment"># Response</span>
+{
+  <span class="property">"make"</span>: <span class="string">"Ford"</span>,
+  <span class="property">"model"</span>: <span class="string">"F-150"</span>,
+  <span class="property">"year"</span>: <span class="string">2022</span>,
+  <span class="property">"tier"</span>: <span class="string">"free"</span>
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat">
+          <h3>25,034</h3>
+          <p>Unique trucks in database</p>
+        </div>
+        <div class="stat">
+          <h3>87</h3>
+          <p>Years of data (1940–2026)</p>
+        </div>
+        <div class="stat">
+          <h3>61</h3>
+          <p>Makes supported</p>
+        </div>
+        <div class="stat">
+          <h3>50+</h3>
+          <p>Data points per truck</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREE LOOKUP SEARCH -->
+  <section class="lookup" id="get-started">
+    <div class="container">
+      <div class="section-header">
+        <h2>Free Lookup</h2>
+        <p>Search any truck in our database. No API key needed.</p>
+      </div>
+      <div class="search-box">
+        <h3>🔍 Truck Lookup <span class="free-badge">FREE TIER</span></h3>
+        <form class="search-form" id="search-form" novalidate>
+          <select id="region-select" required>
+            <option value="">Select Region</option>
+            <option value="us">🇺🇸 United States</option>
+            <option value="latam">🌎 Latin America</option>
+            <option value="europe">🇪🇺 Europe</option>
+            <option value="asia">🌏 Asia</option>
+          </select>
+          <select id="make-select" required disabled>
+            <option value="">Select Make</option>
+          </select>
+          <select id="year-select" required disabled>
+            <option value="">Select Year</option>
+          </select>
+          <select id="model-select" required disabled>
+            <option value="">Select Model</option>
+          </select>
+          <button type="submit" id="search-btn" disabled>
+            Search
+          </button>
+        </form>
+        <p class="search-hint">Select make, model, and year to look up a truck. One free lookup per day.</p>
+
+        <div id="result-area">
+          <!-- Results injected here -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Built for Developers</h2>
+        <p>Clean REST API. Predictable responses. No scraping required.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Instant Access</h3>
+          <p>RESTful endpoints with JSON responses. Get truck data in milliseconds, not minutes. No pagination through HTML pages.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Rich Specifications</h3>
+          <p>Engine specs, towing capacity, payload, dimensions, fuel economy, MSRP, colors, and more. 50+ fields per truck.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>Flexible Search</h3>
+          <p>Filter by make, model, year, engine, bed length, cab config, drivetrain. Build powerful truck search in minutes.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Any Platform</h3>
+          <p>REST API works with any language. Official SDKs for Python, JavaScript, and Go. Web, mobile, bots—all covered.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Reliable Data</h3>
+          <p>Manually curated and verified. Real specs from manufacturers, not scraped from forums. Consistent structure across all years.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3>Honest Pricing</h3>
+          <p>Free tier that actually works. Paid plans that don't nickel-and-dime you. No per-request billing surprises.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- API PREVIEW -->
+  <section class="api-preview">
+    <div class="container">
+      <div class="api-preview-grid">
+        <div>
+          <h2>Developer-Friendly API</h2>
+          <p>Every endpoint returns consistent JSON. Clear error messages. Standard HTTP status codes. If you've used any REST API before, you'll feel right at home.</p>
+          <a href="/api/docs" class="btn-primary">View Full Documentation →</a>
+        </div>
+        <div>
+<pre><span class="comment"># Authenticated request</span>
+<span class="keyword">curl</span> -H "X-API-Key: YOUR_API_KEY" \
+  https://api.truckpedia.net/v1/trucks \
+  ?make=Ford \
+  &model=F-150 \
+  &year=2022
+
+<span class="comment"># Response</span>
+{
+  <span class="property">"data"</span>: [{
+    <span class="property">"id"</span>: <span class="string">"truck_abc123"</span>,
+    <span class="property">"make"</span>: <span class="string">"Ford"</span>,
+    <span class="property">"model"</span>: <span class="string">"F-150"</span>,
+    <span class="property">"year"</span>: <span class="string">2022</span>,
+    <span class="property">"engine"</span>: <span class="string">"3.5L EcoBoost V6"</span>,
+    <span class="property">"horsepower"</span>: <span class="string">400</span>,
+    <span class="property">"towing_capacity"</span>: <span class="string">14000</span>,
+    <span class="property">"msrp"</span>: <span class="string">45285</span>
+  }],
+  <span class="property">"pagination"</span>: {
+    <span class="property">"page"</span>: <span class="string">1</span>,
+    <span class="property">"total"</span>: <span class="string">1847</span>
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <h2>Simple, Transparent Pricing</h2>
+        <p>Start free. Upgrade when you need more.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Free</h3>
+          <div class="price">$0<span>/mo</span></div>
+          <p class="description">For evaluation and hobby projects</p>
+          <ul class="pricing-features">
+            <li>1 lookup per day</li>
+            <li>Make, model, year only</li>
+            <li>No authentication required</li>
+            <li>Basic search</li>
+                      </ul>
+          <a href="#get-started" class="pricing-cta">Try Free</a>
+        </div>
+        <div class="pricing-card popular">
+          <h3>Basic</h3>
+          <div class="price">$9.99<span>/mo</span></div>
+          <p class="description">For apps and smaller projects</p>
+          <ul class="pricing-features">
+            <li>1,000 requests per day</li>
+            <li>Full truck data (50+ fields)</li>
+            <li>API authentication</li>
+            <li>Advanced search &amp; filters</li>
+                      </ul>
+          <a href="#get-started" class="pricing-cta">Start Basic</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Pro</h3>
+          <div class="price">$19.99<span>/mo</span></div>
+          <p class="description">For production applications</p>
+          <ul class="pricing-features">
+            <li>Unlimited requests*</li>
+            <li>All Basic features</li>
+            <li>Detailed specifications</li>
+            <li>60 requests/minute</li>
+                      </ul>
+          <a href="#get-started" class="pricing-cta">Start Pro</a>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:0.85em;color:#666;margin-top:1rem;">* See our <a href="/legal/terms-of-service" style="color:#666;">Terms of Service</a> for fair use policy.</p>
+    </div>
+  </section>
+
+  <!-- COVERAGE -->
+  <section class="coverage">
+    <div class="container">
+      <div class="section-header">
+        <h2>Complete Coverage</h2>
+        <p>All major truck manufacturers, all years</p>
+        <p style="font-size: 0.85em; color: #888; margin-top: 8px;">*Does not include semi, tractor, long haul, or heavy duty at this time.</p>
+      </div>
+      <div class="coverage-grid">
+        <div class="coverage-item">
+          <h4>Ford</h4>
+          <p>F-150, F-250, F-350, Ranger, Maverick</p>
+        </div>
+        <div class="coverage-item">
+          <h4>Chevrolet</h4>
+          <p>Silverado, Colorado, HD lineup</p>
+        </div>
+        <div class="coverage-item">
+          <h4>Ram</h4>
+          <p>1500, 2500, 3500, ProMaster</p>
+        </div>
+        <div class="coverage-item">
+          <h4>Toyota</h4>
+          <p>Tacoma, Tundra, Tundra HD</p>
+        </div>
+        <div class="coverage-item">
+          <h4>GMC</h4>
+          <p>Sierra, Canyon, HD lineup</p>
+        </div>
+        <div class="coverage-item">
+          <h4>Nissan</h4>
+          <p>Frontier, Titan, Titan XD</p>
+        </div>
+        <div class="coverage-item">
+          <h4>BYD</h4>
+          <p>Shark, T5M</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to Build?</h2>
+      <p>Get your API key in 30 seconds. No credit card required.</p>
+      <div class="hero-actions">
+        <a href="#get-started" class="btn-primary">Get API Key →</a>
+        <a href="/api/docs" class="btn-secondary">Read Documentation</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <a href="/" class="logo">Truck<span class="brand">Pedia</span>.net</a>
+        <ul class="footer-links">
+          <li><a href="/api/docs">Documentation</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="mailto:api@truckpedia.net">Contact</a></li>
+        </ul>
+        <p class="footer-copy">© 2026 TruckPedia.net. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Data ───────────────────────────────────────────────────────────────────
+    // All makes in database (56 brands)
+    const MAKES = [
+  { name: 'AMC', id: 'amc' },
+  { name: 'BABC', id: 'babc' },
+  { name: 'BAIC', id: 'baic' },
+  { name: 'BYD', id: 'byd' },
+  { name: 'CAMC', id: 'camc' },
+  { name: 'Chery', id: 'chery' },
+  { name: 'Chevrolet', id: 'chevrolet' },
+  { name: 'Citroen', id: 'citroen' },
+  { name: 'DFSK', id: 'dfsk' },
+  { name: 'Daewoo', id: 'daewoo' },
+  { name: 'Daihatsu', id: 'daihatsu' },
+  { name: 'Dodge', id: 'dodge' },
+  { name: 'Fiat', id: 'fiat' },
+  { name: 'Foday', id: 'foday' },
+  { name: 'Ford', id: 'ford' },
+  { name: 'Foton', id: 'foton' },
+  { name: 'GMC', id: 'gmc' },
+  { name: 'Geely', id: 'geely' },
+  { name: 'Great Wall', id: 'great-wall' },
+  { name: 'Holden', id: 'holden' },
+  { name: 'Honda', id: 'honda' },
+  { name: 'Hummer', id: 'hummer' },
+  { name: 'Hyundai', id: 'hyundai' },
+  { name: 'Import Foreign Auto Sales Inc', id: 'import-foreign-auto-sales-inc' },
+  { name: 'International', id: 'international' },
+  { name: 'Isuzu', id: 'isuzu' },
+  { name: 'Iveco', id: 'iveco' },
+  { name: 'JAC', id: 'jac' },
+  { name: 'Jeep', id: 'jeep' },
+  { name: 'Kia', id: 'kia' },
+  { name: 'King Long', id: 'king-long' },
+  { name: 'LDV', id: 'ldv' },
+  { name: 'Lincoln', id: 'lincoln' },
+  { name: 'Lordstown', id: 'lordstown' },
+  { name: 'Mahindra', id: 'mahindra' },
+  { name: 'Mazda', id: 'mazda' },
+  { name: 'Mercedes-Benz', id: 'mercedes-benz' },
+  { name: 'Mitsubishi', id: 'mitsubishi' },
+  { name: 'Nissan', id: 'nissan' },
+  { name: 'Opel', id: 'opel' },
+  { name: 'PAS Inc - GMC', id: 'pas-inc---gmc' },
+  { name: 'PAS, Inc', id: 'pas,-inc' },
+  { name: 'Peugeot', id: 'peugeot' },
+  { name: 'Ram', id: 'ram' },
+  { name: 'Renault', id: 'renault' },
+  { name: 'Rivian', id: 'rivian' },
+  { name: 'Roush Performance', id: 'roush-performance' },
+  { name: 'SAIC', id: 'saic' },
+  { name: 'Saleen Performance', id: 'saleen-performance' },
+  { name: 'Shineray', id: 'shineray' },
+  { name: 'SsangYong', id: 'ssangyong' },
+  { name: 'Subaru', id: 'subaru' },
+  { name: 'Suzuki', id: 'suzuki' },
+  { name: 'Tata', id: 'tata' },
+  { name: 'Tecstar, LP', id: 'tecstar,-lp' },
+  { name: 'Tesla', id: 'tesla' },
+  { name: 'Toyota', id: 'toyota' },
+  { name: 'UAZ', id: 'uaz' },
+  { name: 'Vauxhall', id: 'vauxhall' },
+  { name: 'Volkswagen', id: 'volkswagen' },
+  { name: 'Yutong', id: 'yutong' },
+];
+
+    const MODELS_BY_MAKE = {
+  'AMC': ['CJ-8 Scrambler', 'Comanche', 'Gladiator'],
+  'BABC': ['Truck'],
+  'BAIC': ['Pickup', 'Weiwang'],
+  'BYD': ['F3', 'F6', 'S6', 'Shark'],
+  'CAMC': ['Truck'],
+  'Chery': ['Tiggo'],
+  'Chevrolet': ['AK Series', 'Advance Design', 'Avalanche', 'Blazer', 'C10', 'C10 Pickup', 'C1500', 'C1500 Pickup', 'C20 Pickup', 'C2500', 'C2500 Pickup', 'C3500', 'Colorado', 'Colorado Cab Chassis inc', 'Colorado Crew Cab', 'Colorado Mud Terrain Tires', 'El Camino Pickup', 'Groove', 'K10', 'K10 Pickup', 'K1500 Pickup', 'K20', 'K20 Pickup', 'K2500 Pickup', 'LUV', 'Montana', 'Pickup 2500', 'R10 Pickup', 'R20', 'S-10', 'S10', 'S10 Pickup', 'S10 Pickup 2WD', 'SSR', 'SSR Pickup', 'Silverado', 'Silverado 15', 'Silverado 1500', 'Silverado 2500', 'Silverado 2500 HD', 'Silverado 2500 HD 2WD', 'Silverado 2500 HD 4WD', 'Silverado 3500', 'Silverado 3500 HD', 'Silverado C10', 'Silverado C15', 'Silverado Classic 15', 'Silverado Classic 1500', 'Silverado K10', 'Silverado K15', 'Silverado Mud Terrain Tires', 'Silverado SS 1500', 'T10', 'V10', 'V20 Pickup'],
+  'Citroen': ['Berlingo', 'Jumpy'],
+  'DFSK': ['K01', 'Seres 3'],
+  'Daewoo': ['Damas', 'Lanos', 'Matiz'],
+  'Daihatsu': ['Hijet', 'Rocky'],
+  'Dodge': ['D100', 'D100/D150 Pickup', 'D150', 'D250', 'D250 Pickup', 'Dakota', 'Dakota Pickup', 'Power Ram 50', 'Power Ram 50 Pickup', 'Power Ram50', 'Power Wagon', 'Ram 1500', 'Ram 1500 Pickup', 'Ram 2500', 'Ram 2500 Pickup', 'Ram 3500', 'Ram 50', 'Ram 50 Pickup', 'Rampage Pickup', 'W100', 'W100/W150 Pickup', 'W200', 'W250 Pickup', 'WC'],
+  'Fiat': ['Ducato', 'Fullback', 'Mobi', 'Scudo', 'Strada', 'Toro'],
+  'Foday': ['F16', 'F19', 'F22'],
+  'Ford': ['Bronco', 'Courier', 'Courier Pickup', 'F-1', 'F-100', 'F-150', 'F-150 Lightning', 'F-150 Lightning 4WD Extended Range', 'F-150 Lightning 4WD SR', 'F-150 Lightning PRO 4WD Extended Range', 'F-150 Lightning Platinum', 'F-150 Raptor', 'F-150 SVT Lightning', 'F-250', 'F-250 Super Duty', 'F-350', 'F-350 Super Duty', 'F-450', 'F-450 Super Duty', 'F-500', 'F-600', 'F150', 'F150 Dual-fuel', 'F150 Pickup', 'F150 Pickup 2WD', 'F150 Pickup 2WD H', 'F150 Pickup 2WD Limited', 'F150 Pickup 4WD', 'F150 Pickup 4WD H', 'F150 Pickup 4WD Limited', 'F150 Pickup Tremor', 'F150 Pickup Tremor 4WD', 'F150 Raptor Pickup', 'F250', 'F250 Pickup', 'F250 Pickup 2WD', 'Falcon Ute', 'Lightning F150', 'Lightning Pickup', 'Maverick', 'Maverick FWD', 'Maverick H', 'Maverick HEV FWD', 'Maverick Lariat H', 'Maverick Lobo', 'Maverick Tremor', 'Ranger', 'Ranger 2WD', 'Ranger 4WD', 'Ranger Pickup', 'Ranger Raptor', 'Ranger Tremor', 'Ranger Wildtrak'],
+  'Foton': ['Tunland'],
+  'GMC': ['C-Series', 'C15', 'C15 Pickup', 'C25 Pickup', 'C2500', 'C2500 Sierra', 'C3500', 'Caballero Pickup', 'Canyon', 'Canyon Cab Chassis Inc', 'Canyon Crew Cab', 'Canyon Mud Terrain Tires', 'Hummer', 'Hummer EV Pickup', 'Hummer EV Pickup 2M20', 'Hummer EV Pickup 2X', 'Hummer EV Pickup 3X', 'Hummer EV Pickup MT Tires', 'Hummer EV Pickup MT Tires 2M20', 'Hummer EV Pickup MT Tires 2X', 'Hummer EV Pickup MT Tires 3X', 'Jimmy', 'K15', 'K15 Pickup', 'K25 Pickup', 'K2500 Sierra', 'Panel Van', 'R15 Pickup', 'R25 Pickup', 'S15', 'S15 Pickup', 'Sierra', 'Sierra 15', 'Sierra 1500', 'Sierra 2500', 'Sierra 2500 HD', 'Sierra 2500 HD 2WD', 'Sierra 2500 HD 4WD', 'Sierra 2500 Hd', 'Sierra 3500', 'Sierra 3500 HD', 'Sierra C10', 'Sierra C15', 'Sierra Classic 15', 'Sierra Classic 1500', 'Sierra Denali 1500', 'Sierra K10', 'Sierra K15', 'Sierra Mud Terrain Tires', 'Sonoma', 'T15', 'V15 Pickup', 'V25 Pickup'],
+  'Geely': ['Pickup'],
+  'Great Wall': ['Cannon', 'Poer', 'Steed', 'Wingle'],
+  'Holden': ['Avalanche', 'Colorado', 'Commodore Ute', 'Ute'],
+  'Honda': ['Acty', 'Ridgeline', 'Ridgeline FWD', 'Ridgeline Truck'],
+  'Hummer': ['H1', 'H2', 'H3', 'H3T'],
+  'Hyundai': ['Grand Starex', 'Porter', 'Santa Cruz', 'Starex'],
+  'Import Foreign Auto Sales Inc': ['1fas 410'],
+  'International': ['9800', 'CXT', 'DuraStar', 'HV', 'LT', 'LoadStar', 'MV', 'PayStar', 'TranStar', 'WorkStar'],
+  'Isuzu': ['D-Max', 'D-Max LS', 'D-Max V-Cross', 'Hombre Pickup', 'MU-X', 'N-Series', 'Pickup', 'Pickup 2WD 1-Ton', 'i-280 Extended Cab', 'i-290 Extended Cab', 'i-350 Crew Cab', 'i-370 Crew Cab', 'i-370 Extended Cab'],
+  'Iveco': ['Daily', 'Eurocargo', 'Massif'],
+  'JAC': ['Pickup', 'Refine', 'Sunray', 'T6', 'T8'],
+  'Jeep': ['CJ-5', 'Comanche', 'Comanche Pickup', 'Gladiator', 'Gladiator EcoDiesel', 'Gladiator Pickup', 'Gladiator Rubic EcoDiesel', 'Gladiator Rubicon EcoDiesel', 'J-10', 'J-10 Pickup', 'J-10 Pickup Truck', 'J-20', 'J-20 Pickup Truck', 'Scrambler', 'Scrambler Pickup', 'Wrangler', 'Wrangler Pickup'],
+  'Kia': ['Bongo', 'K2500', 'K3000'],
+  'King Long': ['Pickup'],
+  'LDV': ['G10', 'T60', 'V80'],
+  'Lincoln': ['Blackwood', 'Mark LT'],
+  'Lordstown': ['Endurance'],
+  'Mahindra': ['Bolero', 'Marazzo', 'Pickup', 'Scorpio', 'TR40', 'XUV500', 'Xylo'],
+  'Mazda': ['2500', 'B-Series', 'B2000', 'B2000/B2200 Pickup', 'B2000/B2200/B2600', 'B2200/B2600', 'B2200/B2600i', 'B2300', 'B2300/B3000/B4000 Pickup', 'B2500', 'B2500/B3000/B4000', 'B2600', 'B2600 4x4', 'B2600i 4x4', 'B3000', 'B3000 2WD', 'B3000 FFV', 'B4000', 'BT-50', 'Scrum'],
+  'Mercedes-Benz': ['X-Class'],
+  'Mitsubishi': ['Delica', 'L200', 'L200 Barbarian', 'L200 Triton', 'L200 Warrior', 'Mighty Max', 'Minica', 'Pajero', 'Raider Pickup', 'Toppo', 'Triton', 'Truck'],
+  'Nissan': ['Caravan', 'Frontier', 'Frontier 2WD', 'Frontier 4WD', 'Frontier V6', 'Hardbody', 'NP300', 'NV350', 'Navara', 'Navarra', 'Pickup', 'Titan', 'Titan 2WD', 'Titan 4WD', 'Titan 4WD PRO-4X', 'Titan FE', 'Titan FE 2WD', 'Titan XD', 'Truck', 'Vanette', 'Xterra'],
+  'Opel': ['Movano', 'Vivaro'],
+  'PAS Inc - GMC': ['Pas-Syclone'],
+  'PAS, Inc': ['Pas-Syclone'],
+  'Peugeot': ['Expert', 'Landtrek', 'Partner'],
+  'Ram': ['1500', '1500 Classic', '1500 HO', '1500 TRX', '2500', '3500', 'ProMaster 1500'],
+  'Renault': ['Alaska', 'Alaskan', 'Duster', 'Kwid', 'Oroch'],
+  'Rivian': ['R1T', 'R1T 21 inch Dual Large', 'R1T 21 inch Performance Dual Large', 'R1T 22 inch Dual Large', 'R1T 22 inch Performance Dual Large', 'R1T AT Performance Dual Standard Plus', 'R1T All-Terrain Dual Large', 'R1T All-Terrain Dual Large Plus', 'R1T All-Terrain Dual Max', 'R1T All-Terrain Dual Standard Plus', 'R1T All-Terrain Performance Dual Large', 'R1T All-Terrain Performance Dual Large Plus', 'R1T All-Terrain Performance Dual Max', 'R1T All-Terrain Quad Large', 'R1T All-Terrain Tri Max', 'R1T Dual Large', 'R1T Dual Large Plus', 'R1T Dual Max', 'R1T Dual Standard', 'R1T Dual Standard Plus', 'R1T Performance Dual Large', 'R1T Performance Dual Large Plus', 'R1T Performance Dual Max', 'R1T Performance Dual Standard Plus', 'R1T Quad Large', 'R1T Quad Max', 'R1T Tri Max'],
+  'Roush Performance': ['Boss F150 Super Cab', 'F150 Pickup', 'F150 Raptor Pickup', 'Stage 3 F-150', 'Stage 3 F-150 Supercab', 'Stage 3 F-150 Supercrew', 'Stage 3 F150 Regular Cab', 'Stage 3 F150 Super Cab', 'Stage 3 F150 Super Crew'],
+  'SAIC': ['LDV', 'LDV G10', 'Maxus G10', 'Maxus T60'],
+  'Saleen Performance': ['F150 Supercharged', 'S331 Family'],
+  'Shineray': ['T500', 'T600'],
+  'SsangYong': ['Actyon', 'Korando', 'Musso'],
+  'Subaru': ['Baja', 'Brat'],
+  'Suzuki': ['Carry', 'Equator', 'Jimny', 'SJ410K P/U', 'Samurai', 'Vitara'],
+  'Tata': ['Intra', 'Magic', 'Super Ace', 'Ultra', 'Winger', 'Xenon', 'Yodha'],
+  'Tecstar, LP': ['Foose F150 Regular Cab', 'Foose F150 Super Cab', 'Foose F150 Super Crew'],
+  'Tesla': ['Cybertruck', 'Cybertruck Long Range'],
+  'Toyota': ['1-Ton Truck', '4Runner', 'Dyna', 'HiAce', 'Hilux', 'Hilux GR-S', 'Hilux Revo', 'Hilux Rocco', 'Land Cruiser', 'Land Cruiser L/C 79 PU', 'LiteAce', 'Mega Cruiser', 'Pickup', 'T100', 'Tacoma', 'Tacoma 4WD Double Cab', 'Tacoma 4WD Double Cab Off-Road', 'Tacoma 4WD MT', 'TownAce', 'Truck', 'Truck 2WD/T100', 'Truck 4WD/T100', 'Tundra', 'Tundra 2WD', 'Tundra 4WD', 'Tundra 4WD PRO', 'Tundra Hybrid 4WD PRO'],
+  'UAZ': ['Bukhanka', 'Hunter', 'Patriot', 'Pickup'],
+  'Vauxhall': ['Vivaro'],
+  'Volkswagen': ['Amarok', 'Saveiro', 'Tiguan'],
+  'Yutong': ['Pickup'],
+};
+
+    const YEARS = [2026,2025,2024,2023,2022,2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010,2009,2008,2007,2006,2005,2004,2003,2002,2001,2000,1999,1998,1997,1996,1995,1994,1993,1992,1991,1990,1989,1988,1987,1986,1985,1984,1983,1982,1981,1980,1979,1978,1977,1976,1975,1974,1973,1972,1971,1970,1969,1968,1967,1966,1965,1960,1955,1950,1948,1947,1946,1945,1944,1943,1942,1941,1940];
+
+    // ─── DOM refs ───────────────────────────────────────────────────────────────
+    const regionSelect = document.getElementById('region-select');
+    const makeSelect  = document.getElementById('make-select');
+    const modelSelect = document.getElementById('model-select');
+    const yearSelect  = document.getElementById('year-select');
+    const searchBtn   = document.getElementById('search-btn');
+    const searchForm  = document.getElementById('search-form');
+    const resultArea  = document.getElementById('result-area');
+
+    // ─── Populate dropdowns ─────────────────────────────────────────────────────
+    // Makes
+    MAKES.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.name;
+      opt.textContent = m.name;
+      makeSelect.appendChild(opt);
+    });
+
+    // ─── Region to Makes mapping ───────────────────────────────────────────────
+    const REGION_MAKES = {
+      'us': ['AMC', 'Chevrolet', 'Dodge', 'Ford', 'GMC', 'Honda', 'Hummer', 'International', 'Jeep', 'Lincoln', 'Lordstown', 'Nissan', 'Ram', 'Rivian', 'Tesla', 'Toyota'],
+      'latam': ['BYD', 'Chevrolet', 'Ford', 'Fiat', 'Volkswagen', 'Toyota', 'Nissan', 'Renault', 'Peugeot'],
+      'europe': ['Fiat', 'Ford', 'LDV', 'Mercedes-Benz', 'Peugeot', 'Renault', 'Volkswagen'],
+      'asia': ['BYD', 'Toyota', 'Nissan', 'Mitsubishi', 'Isuzu', 'Mazda', 'Honda', 'Hyundai', 'Kia', 'Genesis', 'SsangYong', 'Mahindra', 'Tata', 'Great Wall', 'Foton', 'Suzuki', 'Subaru', 'Tesla'],
+      'all': null  // null = all makes
+    };
+
+    // Populate makes based on region
+    function populateMakesByRegion(region) {
+      makeSelect.innerHTML = '<option value="">Select Make</option>';
+      modelSelect.innerHTML = '<option value="">Select Model</option>';
+      modelSelect.disabled = true;
+      yearSelect.disabled = true;
+      searchBtn.disabled = true;
+
+      const makesInRegion = region === 'all' ? MAKES.map(m => m.name) : (REGION_MAKES[region] || []);
+
+      makesInRegion.forEach(makeName => {
+        const make = MAKES.find(m => m.name === makeName);
+        if (make) {
+          const opt = document.createElement('option');
+          opt.value = make.name;
+          opt.textContent = make.name;
+          makeSelect.appendChild(opt);
+        }
+      });
+
+      makeSelect.disabled = false;
+    }
+
+    // Initialize with all makes
+    populateMakesByRegion('all');
+
+    // Years
+    YEARS.forEach(y => {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = y;
+      yearSelect.appendChild(opt);
+    });
+
+
+    // ─── Dropdown cascade ───────────────────────────────────────────────────────
+    regionSelect.addEventListener('change', () => {
+      const region = regionSelect.value;
+      populateMakesByRegion(region);
+    });
+
+    makeSelect.addEventListener('change', () => {
+      const make = makeSelect.value;
+      yearSelect.value = '';
+      modelSelect.value = '';
+      modelSelect.disabled = true;
+      searchBtn.disabled = true;
+
+      if (!make) {
+        yearSelect.disabled = true;
+        return;
+      }
+
+      yearSelect.disabled = false;
+    });
+
+    // Models that have incomplete data (hp=0 and engine="Engine") — exclude from dropdown
+const BAD_MODELS = new Set([
+  'B2000/B2200 Pickup 2WD','B2300/B3000/B4000 Pickup 2WD','B2300/B3000/B4000 Pickup 4WD',
+  'C10 Pickup 2WD','C15 Pickup 2WD','C1500 Pickup 2WD','C20 Pickup 2WD','C25 Pickup 2WD','C2500 Pickup 2WD',
+  'Caballero Pickup 2WD','Comanche Pickup 2WD','Comanche Pickup 4WD','Courier Pickup 2WD','Courier Pickup 4WD',
+  'D100/D150 Pickup 2WD','D250 Pickup 2WD','Dakota Pickup 2WD','Dakota Pickup 4WD',
+  'El Camino Pickup 2WD',
+  'F150 Pickup 2WD','F150 Pickup 2WD CNG','F150 Pickup 2WD FFV','F150 Pickup 2WD HEV','F150 Pickup 2WD Limited',
+  'F150 Pickup 4WD','F150 Pickup 4WD FFV','F150 Pickup 4WD HEV','F150 Pickup 4WD Limited','F150 Pickup 4WD XL/XLT',
+  'F150 Pickup Tremor 4WD','F150 Pickup Tremor 4WD FFV','F150 Raptor Pickup 4WD',
+  'F250 Pickup 2WD','F250 Pickup 2WD CNG','F250 Pickup 4WD',
+  'Gladiator Pickup 4WD',
+  'Hombre Pickup 2WD','Hombre Pickup 2WD (FFV)','Hombre Pickup 4WD',
+  'Hummer EV Pickup','Hummer EV Pickup 2M20','Hummer EV Pickup 2X','Hummer EV Pickup 3X',
+  'Hummer EV Pickup MT Tires','Hummer EV Pickup MT Tires 2M20','Hummer EV Pickup MT Tires 2X','Hummer EV Pickup MT Tires 3X',
+  'J-10 Pickup 4WD','J-10 Pickup Truck','J-10 Pickup Truck 4WD','J-20 Pickup Truck','J-20 Pickup Truck 4WD',
+  'K10 Pickup 4WD','K15 Pickup 4WD','K1500 Pickup 4WD','K20 Pickup 4WD','K25 Pickup 4WD','K2500 Pickup 4WD',
+  'Lightning Pickup 2WD',
+  'Pickup 2500 2WD','Pickup 2500 4WD','Pickup 2WD','Pickup 2WD 1-Ton','Pickup 4WD',
+  'Power Ram 50 Pickup 4WD',
+  'R10 Pickup 2WD','R15 Pickup 2WD','R20 (C20) Pickup 2WD','R25 Pickup 2WD',
+  'Raider Pickup 2WD','Raider Pickup 4WD',
+  'Ram 1500 Pickup 2WD','Ram 1500 Pickup 4WD','Ram 2500 Pickup 2WD','Ram 2500 Pickup 4WD','Ram 50 Pickup 2WD',
+  'Rampage Pickup 2WD',
+  'Ranger Pickup 2WD','Ranger Pickup 4WD',
+  'S10 Pickup 2WD','S10 Pickup 2WD FFV','S10 Pickup 4WD','S15 Pickup 2WD','S15 Pickup 4WD',
+  'SSR Pickup 2WD','Scrambler Pickup 4WD',
+  'T10 (S10) Pickup 4WD','T15 (S15) Pickup 4WD',
+  'V10 (K10) Pickup 4WD','V15 Pickup 4WD','V20 Pickup 4WD','V25 Pickup 4WD',
+  'W100/W150 Pickup 4WD','W250 Pickup 4WD'
+]);
+
+    yearSelect.addEventListener('change', () => {
+      const make = makeSelect.value;
+      modelSelect.innerHTML = '<option value="">Select Model</option>';
+
+      if (!yearSelect.value) {
+        modelSelect.disabled = true;
+        searchBtn.disabled = true;
+        return;
+      }
+
+      const models = MODELS_BY_MAKE[make] || [];
+      models.forEach(m => {
+        if (BAD_MODELS.has(m)) return; // filter incomplete Pickup entries
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.textContent = m;
+        modelSelect.appendChild(opt);
+      });
+      modelSelect.disabled = false;
+    });
+
+    modelSelect.addEventListener('change', () => {
+      searchBtn.disabled = !makeSelect.value || !modelSelect.value || !yearSelect.value;
+    });
+
+    // ─── Format helpers ─────────────────────────────────────────────────────────
+    function fmt(v) {
+      if (v === null || v === undefined || v === '') return '—';
+      return v;
+    }
+
+    function fmtNum(n) {
+      if (n === null || n === undefined || n === '') return '—';
+      return Number(n).toLocaleString();
+    }
+
+    // ─── Render result ───────────────────────────────────────────────────────────
+    function renderResult(truck) {
+      resultArea.innerHTML = `
+        <div class="result-card">
+          <div class="result-header">
+            <h4>${fmt(truck.make)} ${fmt(truck.model)}</h4>
+            <span class="year-badge">${truck.year}</span>
+          </div>
+          <div class="result-body">
+            <div class="result-field">
+              <label>Engine</label>
+              <span>${fmt(truck.engine)}</span>
+            </div>
+            <div class="result-field">
+              <label>Horsepower</label>
+              <span>${fmtNum(truck.horsepower)} hp</span>
+            </div>
+            <div class="result-field">
+              <label>Torque</label>
+              <span>${fmtNum(truck.torque)} lb-ft</span>
+            </div>
+            <div class="result-field">
+              <label>Transmission</label>
+              <span>${fmt(truck.transmission)}</span>
+            </div>
+            <div class="result-field">
+              <label>Drivetrain</label>
+              <span>${fmt(truck.drivetrain)}</span>
+            </div>
+            <div class="result-field">
+              <label>Towing Capacity</label>
+              <span>${fmtNum(truck.towingCapacity)} lbs</span>
+            </div>
+            <div class="result-field">
+              <label>Payload</label>
+              <span>${fmtNum(truck.payload)} lbs</span>
+            </div>
+            <div class="result-field">
+              <label>Bed Length</label>
+              <span>${fmt(truck.bedLength)}</span>
+            </div>
+            <div class="result-field">
+              <label>Cab Type</label>
+              <span>${fmt(truck.cabType)}</span>
+            </div>
+            <div class="result-field">
+              <label>Fuel Type</label>
+              <span>${fmt(truck.fuelType)}</span>
+            </div>
+            <div class="result-field">
+              <label>City MPG</label>
+              <span>${fmtNum(truck.cityMpg)} mpg</span>
+            </div>
+            <div class="result-field">
+              <label>Highway MPG</label>
+              <span>${fmtNum(truck.highwayMpg)} mpg</span>
+            </div>
+            <div class="result-field">
+              <label>Curb Weight</label>
+              <span>${fmtNum(truck.curbWeight)} lbs</span>
+            </div>
+            <div class="result-field">
+              <label>Country</label>
+              <span>${fmt(truck.countryOfOrigin)}</span>
+            </div>
+          </div>
+          <div class="result-footer">
+            <p class="tier-note">
+              Showing basic data. <strong>Upgrade</strong> to Basic or Pro for the full 50+ field spec sheet.
+            </p>
+            <a href="#pricing" class="cta-small">Sign Up for Full Access →</a>
+          </div>
+        </div>
+      `;
+      resultArea.classList.add('visible');
+      resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function renderNotFound(make, model, year) {
+      resultArea.innerHTML = `
+        <div class="not-found">
+          <div class="emoji">🔍</div>
+          <h4>No exact match found</h4>
+          <p>We couldn't find a <strong>${make} ${model} ${year}</strong> in our database.<br>Try a different year or check your spelling.</p>
+        </div>
+      `;
+      resultArea.classList.add('visible');
+    }
+
+    function renderError(msg) {
+      resultArea.innerHTML = `<div class="result-error">⚠ ${msg}</div>`;
+      resultArea.classList.add('visible');
+    }
+
+    // ─── Search ─────────────────────────────────────────────────────────────────
+    searchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const make  = makeSelect.value;
+      const model = modelSelect.value;
+      const year  = yearSelect.value;
+
+      if (!make || !model || !year) return;
+
+      // Loading state
+      searchBtn.disabled = true;
+      searchBtn.innerHTML = '<span class="spinner"></span> Searching…';
+      resultArea.classList.remove('visible');
+      resultArea.innerHTML = '';
+      resultArea.classList.add('visible');
+      resultArea.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:14px;"><span class="spinner" style="border-color:rgba(249,115,22,0.3);border-top-color:var(--accent);"></span> Searching…</div>';
+
+      try {
+        // Try live API first (free tier, no auth)
+        const params = new URLSearchParams({ make, model, year });
+        const res = await fetch(`https://api.truckpedia.net/api/truck?${params}`);
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.truck.make) {
+            // API returned a match — fetch full details from trucks.json
+            const trucksRes = await fetch('/api/trucks.json');
+            const trucks = await trucksRes.json();
+            const match = trucks.find(t =>
+              t.make === data.truck.make &&
+              t.model === data.truck.model &&
+              String(t.year) === String(data.truck.year)
+            );
+            if (match) {
+              renderResult(match);
+            } else {
+              renderResult(data);
+            }
+          } else {
+            renderNotFound(make, model, year);
+          }
+        } else if (res.status === 404) {
+          renderNotFound(make, model, year);
+        } else {
+          throw new Error(`API error: ${res.status}`);
+        }
+      } catch (_) {
+        // Fallback: search local trucks.json
+        try {
+          const trucksRes = await fetch('/api/trucks.json');
+          const trucks = await trucksRes.json();
+          // Normalize year comparison
+          const match = trucks.find(t =>
+            t.make.toLowerCase() === make.toLowerCase() &&
+            t.model.toLowerCase() === model.toLowerCase() &&
+            String(t.year) === String(year)
+          );
+          if (match) {
+            renderResult(match);
+          } else {
+            renderNotFound(make, model, year);
+          }
+        } catch (__) {
+          renderError('Unable to reach the API. Please try again.');
+        }
+      } finally {
+        searchBtn.disabled = false;
+        searchBtn.innerHTML = 'Search';
+      }
+    });
+
+    // ─── Smooth scroll for anchor links ─────────────────────────────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // ─── Nav active state ────────────────────────────────────────────────────────
+    const path = window.location.pathname;
+    if (path.includes('/api/docs') || path.includes('/docs')) {
+      document.getElementById('nav-docs')?.classList.add('active');
+    } else {
+      document.getElementById('nav-home')?.classList.add('active');
+    }
+  </script>
+</body>
+</html>

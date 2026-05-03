@@ -1,0 +1,30 @@
+{
+  "disk": {
+    "total": "228Gi",
+    "used": "12Gi",
+    "available": "155Gi",
+    "percent": 7
+  },
+  "external": {
+    "name": "External Drive",
+    "total": "466Gi",
+    "used": "214Mi",
+    "available": "466Gi",
+    "percent": 1
+  },
+  "memory": {
+    "total": "16.0 GB",
+    "active": 1.5
+  },
+  "cpu": {
+    "load": 1.73
+  },
+  "cron": {
+    "jobsEnabled": 15,
+    "jobs": [{"name":"3hourly-security-check","schedule":"cron 0","next":"in 1h","status":"ok","model":"-"},{"name":"team-self-improve","schedule":"cron 0","next":"in 3h","status":"error","model":"ollama/phi3:latest"},{"name":"gunner-alerts","schedule":"cron 0","next":"in 7h","status":"error","model":"ollama/phi3:latest"},{"name":"truck-database-expansion","schedule":"cron 0","next":"in 9h","status":"error","model":"minimax/abab6.5s-..."},{"name":"Memory","schedule":"cron 0","next":"in 10h","status":"ok","model":"-"},{"name":"daily-maintenance","schedule":"cron 0","next":"in 11h","status":"ok","model":"-"},{"name":"daily-backup","schedule":"cron 30","next":"in 12h","status":"ok","model":"-"},{"name":"lt-market-scan","schedule":"cron 30","next":"in 16h","status":"ok","model":"ollama/phi3:latest"},{"name":"daily-affirmation-davina","schedule":"cron 30","next":"in 16h","status":"ok","model":"-"},{"name":"agentmail-noon-check","schedule":"cron 0","next":"in 19h","status":"ok","model":"ollama/phi3:latest"},{"name":"agentmail-4pm-check","schedule":"cron 0","next":"in 23h","status":"ok","model":"ollama/phi3:latest"},{"name":"crypto-strategy-review","schedule":"cron 0","next":"in 4d","status":"idle","model":"ollama/phi3:latest"},{"name":"weekly-security-audit","schedule":"cron 0","next":"in 5d","status":"ok","model":"-"},{"name":"Chief","schedule":"cron 0","next":"in 6d","status":"ok","model":"ollama/phi3:latest"},{"name":"weekly-jessica-email","schedule":"cron 0","next":"in 7d","status":"ok","model":"ollama/phi3:latest"}]
+  },
+  "openclaw": {
+    "version": "",
+    "gateway": "running"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "skills": {
+    "web-research-assistant": {
+      "version": "0.1.0",
+      "installedAt": 1773176202819
+    },
+    "market-research": {
+      "version": "1.0.0",
+      "installedAt": 1773176207845
+    },
+    "coding": {
+      "version": "1.0.3",
+      "installedAt": 1773176212649
+    },
+    "content-strategy": {
+      "version": "0.1.0",
+      "installedAt": 1773176249721
+    },
+    "social-media-scheduler": {
+      "version": "1.0.0",
+      "installedAt": 1773176267327
+    },
+    "youtube-transcript": {
+      "version": "1.0.1",
+      "installedAt": 1773197414779
+    },
+    "youtube-iu": {
+      "version": "1.0.0",
+      "installedAt": 1773197420926
+    },
+    "youtube-download": {
+      "version": "1.0.3",
+      "installedAt": 1773197426653
+    },
+    "cad-agent": {
+      "version": "1.0.0",
+      "installedAt": 1773243069229
+    },
+    "find-stl": {
+      "version": "0.1.0",
+      "installedAt": 1773243076200
+    },
+    "printpal-3d": {
+      "version": "1.0.2",
+      "installedAt": 1773243131288
+    },
+    "agentmail": {
+      "version": "1.1.1",
+      "installedAt": 1773244283915
+    },
+    "agent-browser": {
+      "version": "0.2.0",
+      "installedAt": 1773246009468
+    },
+    "data-analysis": {
+      "version": "1.0.2",
+      "installedAt": 1773287897205
+    },
+    "crypto-market-data": {
+      "version": "1.0.2",
+      "installedAt": 1773346481016
+    },
+    "database-operations": {
+      "version": "1.0.0",
+      "installedAt": 1773288425490
+    },
+    "seo": {
+      "version": "1.0.3",
+      "installedAt": 1773288548925
+    },
+    "xurl": {
+      "version": "1.0.0",
+      "installedAt": 1773327963024
+    },
+    "crypto-trading-bot": {
+      "version": "1.0.0",
+      "installedAt": 1773346451308
+    },
+    "crypto": {
+      "version": "1.0.5",
+      "installedAt": 1773346509690
+    },
+    "wisdom-claw": {
+      "version": "1.2.0",
+      "installedAt": 1776125225545
+    },
+    "business-ideas": {
+      "version": "1.0.0",
+      "installedAt": 1774381996593
+    },
+    "reddit-research": {
+      "version": "1.0.0",
+      "installedAt": 1774385365689
+    },
+    "automation-workflows": {
+      "version": "0.1.0",
+      "installedAt": 1774385372255
+    },
+    "project-planner": {
+      "version": "1.0.2",
+      "installedAt": 1774385378160
+    },
+    "daily-trending": {
+      "version": "1.0.0",
+      "installedAt": 1774386747965
+    },
+    "clawmage-learning-loop": {
+      "version": "1.0.0",
+      "installedAt": 1776888667079
+    }
+  }
+}

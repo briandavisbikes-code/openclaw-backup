@@ -1,0 +1,14 @@
+{
+  "name": "discord-gemini-bridge",
+  "version": "1.0.0",
+  "description": "Routes Discord messages through Gemini bridge for 73% cost savings",
+  "author": "OpenClaw",
+  "license": "MIT",
+  "main": "scripts/discord-gemini-bridge.js",
+  "dependencies": {},
+  "tags": ["discord", "gemini", "cost-savings", "bridge"],
+  "activation": {
+    "channels": ["discord"],
+    "auto": true
+  }
+}

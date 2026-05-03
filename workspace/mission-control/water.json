@@ -1,0 +1,75 @@
+{
+  "lastUpdated": "2026-05-03 06:00",
+  "reservoirs": [
+    {
+      "name": "Castaic Lake",
+      "percent": 85,
+      "current": 0.28,
+      "capacity": 0.3,
+      "trend": "up"
+    },
+    {
+      "name": "Folsom Lake",
+      "percent": 95,
+      "current": 0.93,
+      "capacity": 1.0,
+      "trend": "up"
+    },
+    {
+      "name": "Lake Berryessa",
+      "percent": 95,
+      "current": 1.53,
+      "capacity": 1.6,
+      "trend": "up"
+    },
+    {
+      "name": "Lake Oroville",
+      "percent": 97,
+      "current": 3.33,
+      "capacity": 3.4,
+      "trend": "up"
+    },
+    {
+      "name": "Lake Perris",
+      "percent": 70,
+      "current": 0.02,
+      "capacity": 0.0,
+      "trend": "up"
+    },
+    {
+      "name": "Lake Shasta",
+      "percent": 91,
+      "current": 4.14,
+      "capacity": 4.6,
+      "trend": "up"
+    },
+    {
+      "name": "Lake Success",
+      "percent": 76,
+      "current": 0.06,
+      "capacity": 0.1,
+      "trend": "up"
+    },
+    {
+      "name": "Millerton Lake",
+      "percent": 90,
+      "current": 0.47,
+      "capacity": 0.5,
+      "trend": "up"
+    },
+    {
+      "name": "Pine Flat Lake",
+      "percent": 84,
+      "current": 0.84,
+      "capacity": 1.0,
+      "trend": "up"
+    },
+    {
+      "name": "San Luis Reservoir",
+      "percent": 85,
+      "current": 1.73,
+      "capacity": 2.0,
+      "trend": "up"
+    }
+  ]
+}

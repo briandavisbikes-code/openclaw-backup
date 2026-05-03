@@ -1,0 +1,9 @@
+{
+  "tasks": [
+    { "id": 1, "title": "Mission Control Updates", "description": "Add new tabs, features, and polish", "project": "1st-class", "status": "in-progress" },
+    { "id": 2, "title": "Content Calendar Q1", "description": "Plan content strategy for the quarter", "project": "chief", "status": "todo" },
+    { "id": 3, "title": "Autobiography", "description": "Write your life story using existing templates", "project": "personal", "status": "in-progress" },
+    { "id": 4, "title": "Animated Comedy Shorts", "description": "AI-generated animated YouTube shorts", "project": "content", "status": "todo" },
+    { "id": 5, "title": "TruckPedia", "description": "Continue building and expanding TruckPedia database", "project": "truckpedia", "status": "in-progress" }
+  ]
+}

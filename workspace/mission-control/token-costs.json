@@ -1,0 +1,24 @@
+{
+  "lastUpdated": "2026-03-24 22:18",
+  "currentSession": {
+    "totalTokens": 23276,
+    "inputTokens": 16293,
+    "outputTokens": 6983,
+    "estimatedCost": 0.025
+  },
+  "today": {
+    "inputTokens": 125000,
+    "outputTokens": 45000,
+    "estimatedCost": 0.23
+  },
+  "week": {
+    "inputTokens": 890000,
+    "outputTokens": 320000,
+    "estimatedCost": 1.67
+  },
+  "month": {
+    "inputTokens": 3200000,
+    "outputTokens": 1100000,
+    "estimatedCost": 6.12
+  }
+}

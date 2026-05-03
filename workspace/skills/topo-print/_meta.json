@@ -1,0 +1,10 @@
+{
+  "name": "topo-print",
+  "version": "1.0.0",
+  "description": "Generate 3D printable terrain models from topographic maps and elevation data",
+  "owner": "warrant",
+  "enabled": true,
+  "skills": [
+    "terrain"
+  ]
+}

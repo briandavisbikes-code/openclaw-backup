@@ -1,0 +1,2639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0f1419;
+            --bg-card: #192734;
+            --bg-hover: #22303c;
+            --accent: #1d9bf0;
+            --accent-hover: #1a8cd8;
+            --text-primary: #ffffff;
+            --text-secondary: #8899a6;
+            --border: #38444d;
+            --success: #00ba7c;
+            --warning: #ffd400;
+            --danger: #f4212e;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header h1::before {
+            content: "🚀";
+        }
+
+        .header #clock {
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Project Ideas Tab */
+        .projects-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .projects-header h2 {
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, #f97316, #fbbf24, #22c55e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            gap: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .project-rank {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+            min-width: 40px;
+        }
+
+        .project-content h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .project-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            color: var(--accent);
+        }
+
+        /* Links Tab */
+        .links-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .links-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .link-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .link-card:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .link-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .link-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Notes Tab */
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .notes-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .btn-save {
+            padding: 0.5rem 1rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-save:hover {
+            opacity: 0.9;
+        }
+
+        .notes-container {
+            padding: 2rem;
+            height: calc(100vh - 200px);
+        }
+
+        #notes-textarea {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            resize: none;
+        }
+
+        #notes-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* World Clock Tab */
+        .clock-header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .clock-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .clock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .clock-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .clock-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .clock-city {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .clock-tz {
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .clock-time {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+            color: #22c55e;
+            margin-bottom: 0.25rem;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+        }
+
+        .clock-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Lunar Tab */
+        .lunar-header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .lunar-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .lunar-content {
+            padding: 2rem;
+        }
+
+        .lunar-main {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .moon-phase-icon {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+        }
+
+        .moon-phase-name {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .moon-illumination {
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+
+        .lunar-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .lunar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .lunar-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .lunar-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .lunar-calendar {
+            margin-top: 1rem;
+        }
+
+        .lunar-calendar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .zodiac-sidebar {
+            position: fixed;
+            right: 2rem;
+            top: 180px;
+            width: 320px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .zodiac-sidebar-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .zodiac-main-sign {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .zodiac-dates {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .zodiac-element {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: var(--bg-dark);
+            border-radius: 6px;
+        }
+
+        .zodiac-traits {
+            margin-bottom: 1rem;
+        }
+
+        .zodiac-trait-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .zodiac-traits-list {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .zodiac-lucky {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-dark);
+            border-radius: 6px;
+        }
+
+        .zodiac-lucky span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .zodiac-mood {
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        .zodiac-mood-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .zodiac-mood-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .lunar-days {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lunar-day {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            cursor: default;
+        }
+
+        .lunar-day.today {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(29, 155, 240, 0.5);
+        }
+
+        .lunar-day.full {
+            background: #fbbf24;
+            border-color: #fbbf24;
+        }
+
+        .lunar-day.new {
+            background: #333;
+            border-color: #555;
+        }
+
+        /* Water Levels Tab */
+        .water-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .water-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .water-summary {
+            padding: 0.75rem 2rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .water-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+        }
+
+        .water-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: transform 0.2s;
+        }
+
+        .water-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .water-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .water-percent {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'SF Mono', 'Menlo', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .water-trend {
+            font-size: 1.8rem;
+        }
+
+        .water-trend.up {
+            color: #22c55e;
+        }
+
+        .water-trend.down {
+            color: #ef4444;
+        }
+
+        .water-bar-bg {
+            height: 8px;
+            background: var(--bg-dark);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .water-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .water-capacity {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            background: var(--bg-card);
+            padding: 0 2rem;
+            border-bottom: 1px solid var(--border);
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Kanban Board */
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            min-height: 500px;
+        }
+
+        .kanban-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .kanban-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .btn-refresh {
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-refresh:hover {
+            background: var(--accent-hover);
+        }
+
+        .kanban-column {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 400px;
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .column-header h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .column-count {
+            background: var(--bg-hover);
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .task-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: grab;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .task-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .task-card.dragging {
+            opacity: 0.5;
+        }
+
+        .task-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .task-description {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .task-tags {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 0.15rem 0.4rem;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+
+        .tag-truckpedia { background: #61358320; color: #a855f7; }
+        .tag-website { background: #1d9bf020; color: #1d9bf0; }
+        .tag-3d-printing { background: #00ba7c20; color: #00ba7c; }
+        .tag-crypto { background: #ffd40020; color: #ffd400; }
+
+        .add-task-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: transparent;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-task-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Calendar */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .calendar-nav button {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .calendar-nav button:hover {
+            background: var(--bg-hover);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-day-header {
+            background: var(--bg-card);
+            padding: 0.75rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .calendar-day {
+            background: var(--bg-dark);
+            min-height: 100px;
+            padding: 0.5rem;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.4;
+        }
+
+        .calendar-day.today {
+            background: var(--bg-card);
+        }
+
+        .day-number {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .calendar-day.today .day-number {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .calendar-view-week .calendar-day {
+            min-height: 400px;
+        }
+
+        .calendar-view-week .day-task {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.6rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .day-tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .day-task {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .day-task.priority-high {
+            border-left-color: var(--danger);
+        }
+
+        .day-task.priority-medium {
+            border-left-color: var(--warning);
+        }
+
+        .day-task.priority-low {
+            border-left-color: var(--success);
+        }
+
+        /* Team Members */
+        .team-header {
+            margin-bottom: 2rem;
+        }
+
+        .team-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mission-statement {
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .mission-statement h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mission-statement p {
+            color: #ffffff;
+            line-height: 1.6;
+            font-size: 1.3rem;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .systems-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .systems-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .system-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .system-card.status-healthy {
+            border-color: var(--success);
+        }
+
+        .system-card.status-warning {
+            border-color: var(--warning);
+        }
+
+        .system-card.status-error {
+            border-color: var(--danger);
+        }
+
+        .system-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .system-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .system-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-healthy .system-status {
+            background: var(--success)20;
+            color: var(--success);
+        }
+
+        .status-warning .system-status {
+            background: var(--warning)20;
+            color: var(--warning);
+        }
+
+        .status-error .system-status {
+            background: var(--danger)20;
+            color: var(--danger);
+        }
+
+        .system-metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .system-metric-label {
+            color: var(--text-secondary);
+        }
+
+        .system-metric-value {
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-dark);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-fill.healthy {
+            background: var(--success);
+        }
+
+        .progress-fill.warning {
+            background: var(--warning);
+        }
+
+        .progress-fill.danger {
+            background: var(--danger);
+        }
+
+        .cron-jobs-list {
+            margin-top: 0.75rem;
+            border-top: 1px solid var(--border);
+            padding-top: 0.75rem;
+        }
+
+        .cron-job-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .cron-job-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .cron-job-details {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .llms-list {
+            margin-top: 0.75rem;
+            border-top: 1px solid var(--border);
+            padding-top: 0.75rem;
+        }
+
+        .llm-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.4rem 0.6rem;
+            background: var(--bg-dark);
+            border-radius: 6px;
+        }
+
+        .llm-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .llm-provider {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .system-metric-value.is-llms {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .mail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .mail-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .mail-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            height: calc(100vh - 250px);
+            overflow: hidden;
+        }
+
+        .mail-container iframe {
+            width: 100%;
+            height: 100%;
+            background: white;
+        }
+
+        .team-member-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .team-member-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .member-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .member-avatar.diver {
+            background: #dc143c;
+            position: relative;
+        }
+
+        .member-avatar.diver::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 14px;
+            background: white;
+            transform: rotate(-45deg);
+            top: 50%;
+            margin-top: -7px;
+        }
+
+        .member-avatar.diver::after {
+            content: '🤿';
+            position: relative;
+            z-index: 1;
+            font-size: 1.8rem;
+        }
+
+        .member-avatar.jolly-roger {
+            background: black;
+            position: relative;
+        }
+
+        .member-avatar.jolly-roger::before {
+            content: '☠️';
+            position: relative;
+            z-index: 1;
+            font-size: 2rem;
+        }
+
+        .member-avatar.camo {
+            background: 
+                radial-gradient(circle at 30% 30%, #4a5d23 0%, #4a5d23 20%, transparent 20%),
+                radial-gradient(circle at 70% 60%, #5c4a1f 0%, #5c4a1f 20%, transparent 20%),
+                radial-gradient(circle at 40% 70%, #3d4a2a 0%, #3d4a2a 20%, transparent 20%),
+                radial-gradient(circle at 80% 20%, #4a5d23 0%, #4a5d23 15%, transparent 15%),
+                #2f3a20;
+            position: relative;
+        }
+
+        .member-avatar.camo::after {
+            content: '💣';
+            position: relative;
+            z-index: 1;
+            font-size: 1.8rem;
+        }
+
+        .member-avatar.anchor {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            position: relative;
+        }
+
+        .member-avatar.anchor::after {
+            content: '⚓';
+            position: relative;
+            z-index: 1;
+            font-size: 2rem;
+        }
+
+        .member-avatar.captain {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            position: relative;
+        }
+
+        .member-avatar.captain::after {
+            content: '🎖️';
+            position: relative;
+            z-index: 1;
+            font-size: 2rem;
+        }
+
+        .team-member-card.captain {
+            border: 2px solid #ffd700;
+            background: linear-gradient(135deg, var(--bg-card), #2a2a00);
+        }
+
+        .team-member-card.lt {
+            border: 2px solid #c0c0c0;
+            background: linear-gradient(135deg, var(--bg-card), #1a1a2a);
+        }
+
+        .team-member-card.chief {
+            border: 2px solid #dc143c;
+            background: linear-gradient(135deg, var(--bg-card), #2a0a0a);
+        }
+
+        .team-member-card.warrant {
+            border: 2px solid #1d9bf0;
+            background: linear-gradient(135deg, var(--bg-card), #0a1a2a);
+        }
+
+        .team-member-card.1st-class {
+            border: 2px solid #fbbf24;
+            background: linear-gradient(135deg, var(--bg-card), #3a3520);
+        }
+
+        .team-member-card.gunner {
+            border: 2px solid #2ecc71;
+            background: linear-gradient(135deg, var(--bg-card), #1a2a1f);
+        }
+
+        .team-member-card.deckhand {
+            border: 2px solid #ffffff;
+            background: linear-gradient(135deg, var(--bg-card), #2a2a2a);
+        }
+
+        .member-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .member-role {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .member-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .member-activity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(29, 155, 240, 0.1);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .activity-icon {
+            font-size: 0.9rem;
+        }
+
+        .member-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-dark);
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .kanban-board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kanban-board {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+            }
+
+            .calendar-day {
+                min-height: 60px;
+            }
+
+            .day-tasks {
+                display: none;
+            }
+
+            .calendar-day.today .day-tasks {
+                display: flex;
+            }
+        }
+    
+        .linear-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; border-bottom: 1px solid var(--border); }
+        .linear-team-info { padding: 0.75rem 2rem; background: var(--bg-card); border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        .team-name { font-weight: 600; color: var(--accent); }
+        .linear-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 1.5rem 2rem; }
+        .linear-column { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; }
+        .linear-column .column-header { display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+        .linear-column .column-header h3 { font-size: 0.9rem; color: var(--text-secondary); }
+        .issue-card { background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; margin-bottom: 0.5rem; }
+        .issue-title { font-size: 0.85rem; margin-bottom: 0.25rem; }
+        .issue-meta { font-size: 0.75rem; color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Mission Control</h1>
+        <div id="clock"></div>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-btn active" data-tab="kanban">📋 Kanban</button>
+        <button class="tab-btn" data-tab="team">👥 Team</button>
+        <button class="tab-btn" data-tab="systems">💻 Systems</button>
+        <button class="tab-btn" data-tab="notes">📝 Notes</button>
+        <button class="tab-btn" data-tab="world-clock">🌍 World Clock</button>
+        <button class="tab-btn" data-tab="crypto-tools">🪙 Crypto & AI</button>
+        <button class="tab-btn" data-tab="lunar">🌙 Lunar</button>
+        <button class="tab-btn" data-tab="water">💧 CA Water</button>
+        <button class="tab-btn" data-tab="linear">📊 Linear</button>
+    </nav>
+
+
+
+    <!-- Notes Tab -->
+    <div class="tab-content" id="notes">
+        <div class="notes-header">
+            <h2>📝 Quick Notes</h2>
+            <button class="btn btn-save" onclick="saveNotes()">💾 Save</button>
+        </div>
+        <div class="notes-container">
+            <textarea id="notes-textarea" placeholder="Write your notes here..."></textarea>
+        </div>
+    </div>
+
+    <!-- World Clock Tab -->
+    <div class="tab-content" id="world-clock">
+        <div class="clock-header">
+            <h2>🌍 World Clock</h2>
+        </div>
+        <div class="clock-grid">
+            <div class="clock-card">
+                <div class="clock-city">Los Angeles</div>
+                <div class="clock-tz">Pacific (PT)</div>
+                <div class="clock-time" data-tz="America/Los_Angeles">--:--</div>
+                <div class="clock-date">--</div>
+            </div>
+            <div class="clock-card">
+                <div class="clock-city">Denver</div>
+                <div class="clock-tz">Mountain (MT)</div>
+                <div class="clock-time" data-tz="America/Denver">--:--</div>
+                <div class="clock-date">--</div>
+            </div>
+            <div class="clock-card">
+                <div class="clock-city">Chicago</div>
+                <div class="clock-tz">Central (CT)</div>
+                <div class="clock-time" data-tz="America/Chicago">--:--</div>
+                <div class="clock-date">--</div>
+            </div>
+            <div class="clock-card">
+                <div class="clock-city">New York</div>
+                <div class="clock-tz">Eastern (ET)</div>
+                <div class="clock-time" data-tz="America/New_York">--:--</div>
+                <div class="clock-date">--</div>
+            </div>
+            <div class="clock-card">
+                <div class="clock-city">London</div>
+                <div class="clock-tz">GMT/BST</div>
+                <div class="clock-time" data-tz="Europe/London">--:--</div>
+                <div class="clock-date">--</div>
+            </div>
+            <div class="clock-card">
+                <div class="clock-city">Tokyo</div>
+                <div class="clock-tz">Japan (JST)</div>
+                <div class="clock-time" data-tz="Asia/Tokyo">--:--</div>
+                <div class="clock-date">--</div>
+            </div>
+            <div class="clock-card">
+                <div class="clock-city">Sydney</div>
+                <div class="clock-tz">Australia (AEST)</div>
+                <div class="clock-time" data-tz="Australia/Sydney">--:--</div>
+                <div class="clock-date">--</div>
+            </div>
+            <div class="clock-card">
+                <div class="clock-city">Dubai</div>
+                <div class="clock-tz">Gulf (GST)</div>
+                <div class="clock-time" data-tz="Asia/Dubai">--:--</div>
+                <div class="clock-date">--</div>
+            </div>
+            <div class="clock-card">
+                <div class="clock-city">UTC</div>
+                <div class="clock-tz">Universal (UTC)</div>
+                <div class="clock-time" data-tz="UTC">--:--</div>
+                <div class="clock-date">--</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lunar Tab -->
+    
+    <!-- Crypto & AI Tools Tab -->
+    <div class="tab-content" id="crypto-tools">
+        <div class="links-header">
+            <h2>Crypto &amp; AI Tools</h2>
+        </div>
+        <div class="links-grid">
+            <a href="https://github.com" target="_blank" class="link-card">
+                <span class="link-icon">🐙</span>
+                <span class="link-title">GitHub</span>
+            </a>
+            <a href="https://chat.openai.com" target="_blank" class="link-card">
+                <span class="link-icon">🤖</span>
+                <span class="link-title">ChatGPT</span>
+            </a>
+            <a href="https://claude.ai" target="_blank" class="link-card">
+                <span class="link-icon">🧠</span>
+                <span class="link-title">Claude</span>
+            </a>
+            <a href="https://discord.com" target="_blank" class="link-card">
+                <span class="link-icon">💬</span>
+                <span class="link-title">Discord</span>
+            </a>
+            <a href="https://youtube.com" target="_blank" class="link-card">
+                <span class="link-icon">▶️</span>
+                <span class="link-title">YouTube</span>
+            </a>
+            <a href="https://twitter.com" target="_blank" class="link-card">
+                <span class="link-icon">🐦</span>
+                <span class="link-title">X/Twitter</span>
+            </a>
+            <a href="https://www.minimax.io" target="_blank" class="link-card">
+                <span class="link-icon">🧠</span>
+                <span class="link-title">MiniMax</span>
+            </a>
+            <a href="https://clawhub.com" target="_blank" class="link-card">
+                <span class="link-icon">🛠️</span>
+                <span class="link-title">ClawHub</span>
+            </a>
+            <a href="https://cursor.sh" target="_blank" class="link-card">
+                <span class="link-icon">⌨️</span>
+                <span class="link-title">Cursor</span>
+            </a>
+            <a href="https://perplexity.ai" target="_blank" class="link-card">
+                <span class="link-icon">🔍</span>
+                <span class="link-title">Perplexity</span>
+            </a>
+            <a href="https://cloudflare.com" target="_blank" class="link-card">
+                <span class="link-icon">☁️</span>
+                <span class="link-title">Cloudflare</span>
+            </a>
+            <a href="https://vercel.com" target="_blank" class="link-card">
+                <span class="link-icon">▲</span>
+                <span class="link-title">Vercel</span>
+            </a>
+            <a href="https://supabase.com" target="_blank" class="link-card">
+                <span class="link-icon">🗄️</span>
+                <span class="link-title">Supabase</span>
+            </a>
+            <a href="https://deepseek.com" target="_blank" class="link-card">
+                <span class="link-icon">🧠</span>
+                <span class="link-title">DeepSeek</span>
+            </a>
+            <a href="https://whisperflow.ai" target="_blank" class="link-card">
+                <span class="link-icon">🎙️</span>
+                <span class="link-title">Whisperflow</span>
+            </a>
+            <a href="https://www.anycubic.com/pages/anycubic-slicer" target="_blank" class="link-card">
+                <span class="link-icon">🖨️</span>
+                <span class="link-title">Anycubic Slicer</span>
+            </a>
+            <a href="https://www.thingiverse.com" target="_blank" class="link-card">
+                <span class="link-icon">🧱</span>
+                <span class="link-title">Thingiverse</span>
+            </a>
+            <a href="https://www.printables.com" target="_blank" class="link-card">
+                <span class="link-icon">📐</span>
+                <span class="link-title">Printables</span>
+            </a>
+            <a href="https://www.figma.com" target="_blank" class="link-card">
+                <span class="link-icon">🎨</span>
+                <span class="link-title">Figma</span>
+            </a>
+            <a href="https://stackoverflow.com" target="_blank" class="link-card">
+                <span class="link-icon">📚</span>
+                <span class="link-title">Stack Overflow</span>
+            </a>
+            <a href="https://developer.mozilla.org" target="_blank" class="link-card">
+                <span class="link-icon">📖</span>
+                <span class="link-title">MDN Docs</span>
+            </a>
+            <a href="https://replit.com" target="_blank" class="link-card">
+                <span class="link-icon">⚡</span>
+                <span class="link-title">Replit</span>
+            </a>
+            <a href="https://codesandbox.io" target="_blank" class="link-card">
+                <span class="link-icon">📦</span>
+                <span class="link-title">CodeSandbox</span>
+            </a>
+            <a href="https://crontab.guru" target="_blank" class="link-card">
+                <span class="link-icon">⏰</span>
+                <span class="link-title">Crontab Guru</span>
+            </a>
+            <a href="https://regex101.com" target="_blank" class="link-card">
+                <span class="link-icon">🔤</span>
+                <span class="link-title">Regex101</span>
+            </a>
+            <a href="https://jsonplaceholder.typicode.com" target="_blank" class="link-card">
+                <span class="link-icon">📋</span>
+                <span class="link-title">JSON Placeholder</span>
+            </a>
+            <a href="https://ngrok.com" target="_blank" class="link-card">
+                <span class="link-icon">🌐</span>
+                <span class="link-title">ngrok</span>
+            </a>
+            <a href="https://www.digitalocean.com" target="_blank" class="link-card">
+                <span class="link-icon">🐳</span>
+                <span class="link-title">DigitalOcean</span>
+            </a>
+            <a href="https://www.coinbase.com" target="_blank" class="link-card">
+                <span class="link-icon">💰</span>
+                <span class="link-title">Coinbase</span>
+            </a>
+            <a href="https://www.binance.com" target="_blank" class="link-card">
+                <span class="link-icon">🟡</span>
+                <span class="link-title">Binance</span>
+            </a>
+            <a href="https://www.coingecko.com" target="_blank" class="link-card">
+                <span class="link-icon">🦎</span>
+                <span class="link-title">CoinGecko</span>
+            </a>
+            <a href="https://www.canva.com" target="_blank" class="link-card">
+                <span class="link-icon">🖌️</span>
+                <span class="link-title">Canva</span>
+            </a>
+            <a href="https://tailwindcss.com" target="_blank" class="link-card">
+                <span class="link-icon">💨</span>
+                <span class="link-title">Tailwind</span>
+            </a>
+            <a href="https://getbootstrap.com" target="_blank" class="link-card">
+                <span class="link-icon">🅱️</span>
+                <span class="link-title">Bootstrap</span>
+            </a>
+            <a href="https://gitlab.com" target="_blank" class="link-card">
+                <span class="link-icon">🦊</span>
+                <span class="link-title">GitLab</span>
+            </a>
+            <a href="https://bitbucket.org" target="_blank" class="link-card">
+                <span class="link-icon">🪣</span>
+                <span class="link-title">Bitbucket</span>
+            </a>
+            <a href="https://www.okx.com" target="_blank" class="link-card">
+                <span class="link-icon">🔵</span>
+                <span class="link-title">OKX</span>
+            </a>
+            <a href="https://www.kraken.com" target="_blank" class="link-card">
+                <span class="link-icon">🦑</span>
+                <span class="link-title">Kraken</span>
+            </a>
+            <a href="https://www.bybit.com" target="_blank" class="link-card">
+                <span class="link-icon">🟣</span>
+                <span class="link-title">Bybit</span>
+            </a>
+            <a href="https://www.thingiverse.com/thing:new" target="_blank" class="link-card">
+                <span class="link-icon">➕</span>
+                <span class="link-title">Thingiverse Upload</span>
+            </a>
+            <a href="https://www.printables.com/model/new" target="_blank" class="link-card">
+                <span class="link-icon">➕</span>
+                <span class="link-title">Printables Upload</span>
+            </a>
+            <a href="https://webhook.site" target="_blank" class="link-card">
+                <span class="link-icon">🪝</span>
+                <span class="link-title">Webhook.site</span>
+            </a>
+            <a href="https://www.linkedin.com" target="_blank" class="link-card">
+                <span class="link-icon">💼</span>
+                <span class="link-title">LinkedIn</span>
+            </a>
+            <a href="https://apps.nationalmap.gov/viewer/" target="_blank" class="link-card">
+                <span class="link-icon">🗺️</span>
+                <span class="link-title">USGS National Map</span>
+            </a>
+            <a href="https://terrain2stl.com" target="_blank" class="link-card">
+                <span class="link-icon">🏔️</span>
+                <span class="link-title">Terrain2STL</span>
+            </a>
+            <a href="https://wiki.anycubic.com/en/fdm-3d-printer/anycubic-kobra-x?_sasdk=fYnJpYW5kYXZpc2Jpa2VzQG1zbi5jb20" target="_blank" class="link-card">
+                <span class="link-icon">🖨️</span>
+                <span class="link-title">Kobra X Wiki</span>
+            </a>
+            <a href="https://touchterrain.geog.mcgill.ca" target="_blank" class="link-card">
+                <span class="link-icon">🌍</span>
+                <span class="link-title">TouchTerrain</span>
+            </a>
+            <a href="https://cable.creux.fr/discord/1" target="_blank" class="link-card">
+                <span class="link-icon">🔌</span>
+                <span class="link-title">Cable Discord</span>
+            </a>
+            <a href="https://www.hitem3d.ai/?utm_source=google&utm_medium=sign_up&utm_campaign=23156713366&gad_source=1&gad_campaignid=23152268336&gbraid=0AAAABAd7BRMsjp6DVEMgZMbfG_vHrJgai&gclid=CjwKCAjw687NBhB4EiwAQ645drOQXEDCO8G-I3RTB3BtFUu1q2MwzPMZ71Tc1C1Q5VEcSiVEQbjwnxoCYNIQAvD_BwE" target="_blank" class="link-card">
+                <span class="link-icon">🎯</span>
+                <span class="link-title">HitErmUp</span>
+            </a>
+        </div>
+            <a href="https://console.agentmail.to/dashboard/inboxes/productionx@agentmail.to" target="_blank" class="link-card">
+                <span class="link-icon">📧</span>
+                <span class="link-title">Agent Mail</span>
+            </a>
+
+    </div>
+
+<div class="tab-content" id="lunar">
+        <div class="lunar-header">
+            <h2>🌙 Lunar Phase</h2>
+        </div>
+        <div class="lunar-content">
+            <div class="lunar-main">
+                <div class="moon-phase-icon" id="moon-icon">🌑</div>
+                <div class="moon-phase-name" id="moon-phase">Loading...</div>
+                <div class="moon-illumination" id="moon-illumination">--% illumination</div>
+            </div>
+            <div class="lunar-details">
+                <div class="lunar-card">
+                    <div class="lunar-label">Moonrise</div>
+                    <div class="lunar-value" id="moonrise">--:--</div>
+                </div>
+                <div class="lunar-card">
+                    <div class="lunar-label">Moonset</div>
+                    <div class="lunar-value" id="moonset">--:--</div>
+                </div>
+                <div class="lunar-card">
+                    <div class="lunar-label">Next Full Moon</div>
+                    <div class="lunar-value" id="next-full">--</div>
+                </div>
+                <div class="lunar-card">
+                    <div class="lunar-label">Next New Moon</div>
+                    <div class="lunar-value" id="next-new">--</div>
+                </div>
+                <div class="lunar-card">
+                    <div class="lunar-label">Lunar Day</div>
+                    <div class="lunar-value" id="lunar-day">--</div>
+                </div>
+                <div class="lunar-card">
+                    <div class="lunar-label">Zodiac</div>
+                    <div class="lunar-value" id="zodiac">--</div>
+                </div>
+            </div>
+            <div class="lunar-calendar">
+                <div class="lunar-calendar-title">30-Day Cycle</div>
+                <div class="lunar-days" id="lunar-days"></div>
+            </div>
+            <div class="zodiac-sidebar">
+                <div class="zodiac-sidebar-title">🌟 Today's Zodiac</div>
+                <div class="zodiac-main-sign" id="zodiac-main">--</div>
+                <div class="zodiac-dates" id="zodiac-dates">--</div>
+                <div class="zodiac-element" id="zodiac-element">Element: --</div>
+                <div class="zodiac-traits">
+                    <div class="zodiac-trait-title">Traits</div>
+                    <div class="zodiac-traits-list" id="zodiac-traits">--</div>
+                </div>
+                <div class="zodiac-lucky" id="zodiac-lucky">
+                    <div>🎂 Lucky #:<span id="lucky-number">--</span></div>
+                    <div>� color:<span id="lucky-color">--</span></div>
+                </div>
+                <div class="zodiac-mood">
+                    <div class="zodiac-mood-title">Horoscope Reading</div>
+                    <div class="zodiac-mood-text" id="horoscope-reading">--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Water Levels Tab -->
+    <div class="tab-content" id="water">
+        <div class="water-header">
+            <h2>💧 California Reservoir Levels</h2>
+            <button class="btn btn-refresh" onclick="updateWaterLevels()">🔄 Refresh</button>
+        </div>
+        <div class="water-summary" id="water-summary">
+            <span>Last updated: <span id="water-date">Loading...</span></span>
+        </div>
+        <div class="water-grid" id="water-grid">
+            <p>Loading reservoir data...</p>
+        </div>
+    </div>
+
+    <!-- Kanban Tab -->
+    
+
+    <!-- Linear Tab -->
+    <div class="tab-content" id="linear">
+        <div class="linear-header">
+            <h2>Linear - ProductionX</h2>
+            <button class="btn btn-primary" id="linear-refresh-btn" onclick="refreshLinearIssues()">Refresh</button>
+        </div>
+        <div class="linear-team-info">
+            <span class="team-name">ProductionX</span>
+            <span id="linear-stats">Click refresh to load</span>
+        </div>
+        <div class="linear-board">
+            <div class="linear-column">
+                <div class="column-header"><h3>Backlog</h3><span id="count-backlog">0</span></div>
+                <div id="issues-backlog"></div>
+            </div>
+            <div class="linear-column">
+                <div class="column-header"><h3>To Do</h3><span id="count-todo">0</span></div>
+                <div id="issues-todo"></div>
+            </div>
+            <div class="linear-column">
+                <div class="column-header"><h3>In Progress</h3><span id="count-inprogress">0</span></div>
+                <div id="issues-inprogress"></div>
+            </div>
+            <div class="linear-column">
+                <div class="column-header"><h3>Done</h3><span id="count-done">0</span></div>
+                <div id="issues-done"></div>
+            </div>
+        </div>
+    </div>
+<div class="tab-content" id="kanban">
+        <div class="kanban-header">
+            <h2>📋 Kanban Board</h2>
+            <button class="btn btn-refresh" onclick="loadTasks()">🔄 Refresh</button>
+        </div>
+        <div class="kanban-board">
+            <div class="kanban-column" data-status="todo">
+                <div class="column-header">
+                    <h3>To Do</h3>
+                    <span class="column-count">0</span>
+                </div>
+                <div class="tasks-container"></div>
+                <button class="add-task-btn" onclick="openTaskModal('todo')">+ Add Task</button>
+            </div>
+            <div class="kanban-column" data-status="in-progress">
+                <div class="column-header">
+                    <h3>In Progress</h3>
+                    <span class="column-count">0</span>
+                </div>
+                <div class="tasks-container"></div>
+                <button class="add-task-btn" onclick="openTaskModal('in-progress')">+ Add Task</button>
+            </div>
+            <div class="kanban-column" data-status="done">
+                <div class="column-header">
+                    <h3>Done</h3>
+                    <span class="column-count">0</span>
+                </div>
+                <div class="tasks-container"></div>
+                <button class="add-task-btn" onclick="openTaskModal('done')">+ Add Task</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Team Tab -->
+    <div class="tab-content" id="team">
+        <div class="team-header">
+            <h2>Team Members</h2>
+        </div>
+        <div class="mission-statement">
+            <h3>🚀 Mission Statement</h3>
+            <p>An autonomous organization of AI Agents that does work for me and produces value 24/7.</p>
+        </div>
+        <div class="team-grid" id="team-grid"></div>
+    </div>
+
+    <!-- Systems Tab -->
+    <div class="tab-content" id="systems">
+        <div class="systems-header">
+            <h2>Systems Health</h2>
+            <button class="btn btn-primary" onclick="refreshSystems()">🔄 Refresh</button>
+        </div>
+        <div class="systems-grid" id="systems-grid"></div>
+    </div>
+
+
+
+    <script>
+        // Data Storage
+        let tasks = [];
+
+        async function loadTasks() {
+            try {
+                const response = await fetch('/tasks.json?v=' + Date.now());
+                const data = await response.json();
+                tasks = data.tasks;
+                renderTasks();
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+                // Fallback to default tasks
+                tasks = [
+                    { id: 1, title: 'Database Build', description: 'Build truck database (1940-2025, US/Asia/Europe)', project: 'truckpedia', status: 'in-progress' },
+                    { id: 2, title: 'Ford F-Series Data', description: 'Add all years and trims for F-150/F-250/F-350', project: 'truckpedia', status: 'in-progress' },
+                    { id: 3, title: 'Chevy Silverado Data', description: 'Add all years and trims for Silverado', project: 'truckpedia', status: 'todo' },
+                    { id: 4, title: 'Ram 1500 Data', description: 'Add all years and trims for Ram 1500', project: 'truckpedia', status: 'todo' },
+                    { id: 5, title: 'Asian Trucks', description: 'Add Toyota, Honda, Mitsubishi, Isuzu trucks', project: 'truckpedia', status: 'todo' },
+                    { id: 6, title: 'European Trucks', description: 'Add Mercedes, Volvo, MAN, Scania trucks', project: 'truckpedia', status: 'todo' },
+                    { id: 7, title: 'Website Phase 2', description: 'Build website after database complete', project: 'truckpedia', status: 'todo' },
+                    { id: 8, title: 'Research Complete', description: 'Competitor analysis and planning done', project: 'truckpedia', status: 'done' }
+                ];
+                renderTasks();
+            }
+        }
+
+        let calendarTasks = JSON.parse(localStorage.getItem('mc-calendar-tasks')) || [
+            { id: 1, title: 'Morning Brief', date: '2026-03-12', priority: 'high', recurring: true },
+            { id: 2, title: 'Daily Affirmation - Davina', date: '2026-03-12', priority: 'low', recurring: true },
+            { id: 3, title: 'Design Review', date: '2026-03-12', priority: 'high' },
+            { id: 4, title: 'Code Sprint', date: '2026-03-14', priority: 'medium' },
+            { id: 5, title: 'Team Standup', date: '2026-03-11', priority: 'low' },
+            { id: 6, title: 'Deploy to Prod', date: '2026-03-18', priority: 'high' }
+        ];
+
+        const teamMembers = [
+            { name: 'CAP', role: 'Captain', description: 'The leader of the mission. Sets priorities and directs the team.', emoji: '🎖️', isCaptain: true, activity: 'Reviewing team progress' },
+            { name: 'LT', role: 'Research & Analysis', description: 'Handles research, analysis, and gathering intelligence for projects.', emoji: '☀️', activity: 'Researching trending topics' },
+            { name: 'Chief', role: 'Planning & Marketing', description: 'Strategic planning, marketing initiatives, and content strategy.', emoji: '🪶', activity: 'Planning content calendar' },
+            { name: 'Warrant', role: '3D Printing', description: '3D printing projects, STL files, and print optimization.', emoji: '🧭', activity: '3D Printer Connected - Ready to Print' },
+            { name: '1st Class', role: 'Webpage Design & UI', description: 'Frontend development, UI/UX design, and data visualization.', emoji: '⭐', activity: 'Updating Mission Control' },
+            { name: 'Gunner', role: 'Crypto & Investing', description: 'Cryptocurrency research, trading, and investment analysis.', emoji: '💋', activity: 'Monitoring BTC price' },
+            { name: 'Deckhand', role: 'Coding', description: 'General coding tasks, automation, and technical implementation.', emoji: '⚓', activity: 'Awaiting tasks' }
+        ];
+
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let calendarView = 'month'; // 'month' or 'week'
+
+        // Tab Navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Clock
+        function updateClock() {
+            const now = new Date();
+            const hour = now.getHours();
+            const icon = (hour >= 6 && hour < 18) ? '☀️ ' : '🌙 ';
+            document.getElementById('clock').textContent = icon + now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: true 
+            });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+        setInterval(updateWorldClocks, 1000);
+        updateWorldClocks();
+
+        // Notes Functions
+        function loadNotes() {
+            const notes = localStorage.getItem('mc-notes') || '';
+            document.getElementById('notes-textarea').value = notes;
+        }
+
+        function saveNotes() {
+            const notes = document.getElementById('notes-textarea').value;
+            localStorage.setItem('mc-notes', notes);
+            alert('Notes saved!');
+        }
+
+        // World Clock Functions
+        function updateWorldClocks() {
+            document.querySelectorAll('.clock-card').forEach(card => {
+                const timeEl = card.querySelector('.clock-time');
+                const dateEl = card.querySelector('.clock-date');
+                const tz = timeEl.dataset.tz;
+                
+                try {
+                    const now = new Date();
+                    const options = { 
+                        timeZone: tz, 
+                        hour: '2-digit', 
+                        minute: '2-digit',
+                        hour12: true 
+                    };
+                    const dateOptions = {
+                        timeZone: tz,
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric'
+                    };
+                    timeEl.textContent = now.toLocaleTimeString('en-US', options);
+                    dateEl.textContent = now.toLocaleDateString('en-US', dateOptions);
+                } catch (e) {
+                    timeEl.textContent = '--:--';
+                    dateEl.textContent = '--';
+                }
+            });
+        }
+
+        // Lunar Functions
+        const moonPhases = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
+        const phaseNames = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
+        
+        function getLunarAge(date) {
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            
+            if (month < 3) {
+                year--;
+                month += 12;
+            }
+            month++;
+            
+            const c = 365.25 * year;
+            const e = 30.6 * month;
+            const jd = c + e + day - 694039.09;
+            const totalDays = jd / 29.5305882;
+            const age = (totalDays - Math.floor(totalDays)) * 29.5305882;
+            
+            return age;
+        }
+
+        function getMoonPhase(date) {
+            const age = getLunarAge(date);
+            const phaseIndex = Math.floor((age / 29.5305882) * 8) % 8;
+            return {
+                icon: moonPhases[phaseIndex],
+                name: phaseNames[phaseIndex],
+                age: age,
+                illumination: Math.round((1 - Math.cos(age / 29.5305882 * 2 * Math.PI)) / 2 * 100)
+            };
+        }
+
+        function getZodiac(date) {
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const zodiacSigns = [
+                { name: 'Capricorn', emoji: '🐐', element: 'Earth', traits: 'Ambitious, disciplined, responsible', lucky: '7', color: 'Brown', mood: 'Focus on goals today.', start: [1, 1], end: [1, 19] },
+                { name: 'Aquarius', emoji: '🏺', element: 'Air', traits: 'Independent, innovative, humanitarian', lucky: '4', color: 'Blue', mood: 'Connect with others meaningfully.', start: [1, 20], end: [2, 18] },
+                { name: 'Pisces', emoji: '🐟', element: 'Water', traits: 'Intuitive, artistic, compassionate', lucky: '3', color: 'Sea Green', mood: 'Creative energy flows freely.', start: [2, 19], end: [3, 20] },
+                { name: 'Aries', emoji: '🐏', element: 'Fire', traits: 'Bold, energetic, passionate', lucky: '9', color: 'Red', mood: 'Take initiative on new ventures.', start: [3, 21], end: [4, 19] },
+                { name: 'Taurus', emoji: '🐂', element: 'Earth', traits: 'Reliable, patient, practical', lucky: '6', color: 'Pink', mood: 'Stability brings comfort today.', start: [4, 20], end: [5, 20] },
+                { name: 'Gemini', emoji: '👯', element: 'Air', traits: 'Versatile, curious, communicative', lucky: '5', color: 'Yellow', mood: 'Share ideas freely today.', start: [5, 21], end: [6, 20] },
+                { name: 'Cancer', emoji: '🦀', element: 'Water', traits: 'Loyal, emotional, nurturing', lucky: '2', color: 'White', mood: 'Family and home matter most.', start: [6, 21], end: [7, 22] },
+                { name: 'Leo', emoji: '🦁', element: 'Fire', traits: 'Confident, generous, charismatic', lucky: '1', color: 'Gold', mood: 'Let your light shine bright.', start: [7, 23], end: [8, 22] },
+                { name: 'Virgo', emoji: '👸', element: 'Earth', traits: 'Analytical, practical, helpful', lucky: '8', color: 'Navy', mood: 'Details matter - stay organized.', start: [8, 23], end: [9, 22] },
+                { name: 'Libra', emoji: '⚖️', element: 'Air', traits: 'Diplomatic, fair-minded, social', lucky: '6', color: 'Lavender', mood: 'Seek harmony in relationships.', start: [9, 23], end: [10, 22] },
+                { name: 'Scorpio', emoji: '🦂', element: 'Water', traits: 'Passionate, resourceful, brave', lucky: '9', color: 'Black', mood: 'Depth over surface today.', start: [10, 23], end: [11, 21] },
+                { name: 'Sagittarius', emoji: '🏹', element: 'Fire', traits: 'Optimistic, adventurous, philosophical', lucky: '3', color: 'Purple', mood: 'Expand your horizons today.', start: [11, 22], end: [12, 21] },
+                { name: 'Capricorn', emoji: '🐐', element: 'Earth', traits: 'Ambitious, disciplined, responsible', lucky: '7', color: 'Brown', mood: 'Focus on goals today.', start: [12, 22], end: [12, 31] }
+            ];
+            
+            for (let sign of zodiacSigns) {
+                if ((month === sign.start[0] && day >= sign.start[1]) || 
+                    (month === sign.end[0] && day <= sign.end[1])) {
+                    return sign;
+                }
+            }
+            return zodiacSigns[2]; // Pisces fallback
+        }
+
+        function getNextFullMoon() {
+            const now = new Date();
+            for (let i = 1; i <= 30; i++) {
+                const date = new Date(now);
+                date.setDate(date.getDate() + i);
+                const phase = getMoonPhase(date);
+                if (phase.name === 'Full Moon') {
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }
+            }
+            return '~30 days';
+        }
+
+        function getNextNewMoon() {
+            const now = new Date();
+            for (let i = 1; i <= 30; i++) {
+                const date = new Date(now);
+                date.setDate(date.getDate() + i);
+                const phase = getMoonPhase(date);
+                if (phase.name === 'New Moon') {
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }
+            }
+            return '~30 days';
+        }
+
+        function generateHoroscope(phaseName, signName, element) {
+            const horoscopes = {
+                'New Moon': [
+                    `${signName} energy is low — plant seeds of intention today. New beginnings favor ${element}-sign energy.`,
+                    `The dark moon invites reflection. Set intentions for the next cycle.`
+                ],
+                'Waxing Crescent': [
+                    `Intentions planted during the new moon are taking root. Nurture them with action.`,
+                    `Growth phase begins. Your ${signName} determination is amplified.`
+                ],
+                'First Quarter': [
+                    `Action and challenge align. ${signName}魄力 (guts) is tested today. Push through obstacles.`,
+                    `Decisions made now have lasting impact. Trust your instincts.`
+                ],
+                'Waxing Gibbous': [
+                    `Refine and adjust. ${signName} attention to detail is heightened.`,
+                    `Almost there! Fine-tune your approach before the full moon.`
+                ],
+                'Full Moon': [
+                    `${signName} emotions run high — release what no longer serves you. Illumination is peak.`,
+                    `Maximum ${element} energy! Major realizations and breakthroughs possible.`
+                ],
+                'Waning Gibbous': [
+                    `Gratitude and sharing are favored. ${signName} generosity increases.`,
+                    `Integration phase. Absorb lessons from the cycle's peak.`
+                ],
+                'Last Quarter': [
+                    `Inner清理 (cleansing) time. ${signName} should focus on letting go.`,
+                    `Release and restore. Old patterns fall away naturally now.`
+                ],
+                'Waning Crescent': [
+                    `${signName} rest is essential. The dark moon offers rest before renewal.`,
+                    `Surrender and prepare. The next new moon brings fresh beginnings.`
+                ]
+            };
+            
+            const readings = horoscopes[phaseName] || horoscopes['Waning Crescent'];
+            return readings[Math.floor(Math.random() * readings.length)];
+        }
+
+        function updateLunar() {
+            const now = new Date();
+            const phase = getMoonPhase(now);
+            
+            document.getElementById('moon-icon').textContent = phase.icon;
+            document.getElementById('moon-phase').textContent = phase.name;
+            document.getElementById('moon-illumination').textContent = phase.illumination + '% illumination';
+            
+            // Approximate moonrise/moonset (simplified)
+            const hours = now.getHours();
+            const moonriseHour = Math.floor((phase.age * 2) % 24);
+            const moonsetHour = (moonriseHour + 12) % 24;
+            
+            document.getElementById('moonrise').textContent = 
+                String(moonriseHour).padStart(2, '0') + ':00';
+            document.getElementById('moonset').textContent = 
+                String(moonsetHour).padStart(2, '0') + ':00';
+            
+            document.getElementById('next-full').textContent = getNextFullMoon();
+            document.getElementById('next-new').textContent = getNextNewMoon();
+            
+            const dayOfCycle = Math.floor(phase.age) + 1;
+            document.getElementById('lunar-day').textContent = 'Day ' + dayOfCycle;
+            
+            const zodiac = getZodiac(now);
+            document.getElementById('zodiac').textContent = zodiac.emoji + ' ' + zodiac.name;
+            
+            // Update zodiac sidebar
+            document.getElementById('zodiac-main').textContent = zodiac.emoji + ' ' + zodiac.name;
+            document.getElementById('zodiac-dates').textContent = `${zodiac.start[0]}/${zodiac.start[1]} - ${zodiac.end[0]}/${zodiac.end[1]}`;
+            document.getElementById('zodiac-element').textContent = 'Element: ' + zodiac.element;
+            document.getElementById('zodiac-traits').textContent = zodiac.traits;
+            document.getElementById('lucky-number').textContent = zodiac.lucky;
+            document.getElementById('lucky-color').textContent = zodiac.color;
+            
+            // Generate horoscope based on moon phase + zodiac
+            const phaseName = phase.name;
+            const signName = zodiac.name;
+            const horoscope = generateHoroscope(phaseName, signName, zodiac.element);
+            document.getElementById('horoscope-reading').textContent = horoscope;
+            
+            // Render 30-day cycle
+            const daysContainer = document.getElementById('lunar-days');
+            let daysHtml = '';
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(now);
+                date.setDate(date.getDate() - Math.floor(phase.age) + i);
+                const p = getMoonPhase(date);
+                const isToday = i === Math.floor(phase.age);
+                const isFull = p.name === 'Full Moon';
+                const isNew = p.name === 'New Moon';
+                
+                let classes = 'lunar-day';
+                if (isToday) classes += ' today';
+                if (isFull) classes += ' full';
+                if (isNew) classes += ' new';
+                
+                daysHtml += `<div class="${classes}" title="${p.name}">${p.icon}</div>`;
+            }
+            daysContainer.innerHTML = daysHtml;
+        }
+
+        // Water Levels Functions
+        async function updateWaterLevels() {
+            try {
+                const response = await fetch('/water.json?v=' + Date.now());
+                const data = await response.json();
+                
+                document.getElementById('water-date').textContent = data.lastUpdated || new Date().toLocaleDateString();
+                
+                const grid = document.getElementById('water-grid');
+                grid.innerHTML = data.reservoirs.map(r => {
+                    const color = r.percent >= 75 ? '#22c55e' : r.percent >= 50 ? '#fbbf24' : r.percent >= 35 ? '#ec4899' : '#ef4444';
+                    const trend = r.trend === 'up' ? '↑' : '↓';
+                    return `
+                        <div class="water-card">
+                            <div class="waterName">${r.name}</div>
+                            <div class="water-percent" style="color: ${color};">${r.percent}% <span class="water-trend ${r.trend}">${trend}</span></div>
+                            <div class="water-bar-bg">
+                                <div class="water-bar-fill" style="width: ${r.percent}%; background: ${color};"></div>
+                            </div>
+                            <div class="water-capacity">${r.current}M AF / ${r.capacity}M AF</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                document.getElementById('water-grid').innerHTML = '<p>Error loading data. Click refresh to try again.</p>';
+            }
+        }
+
+        // Kanban Functions
+        function renderTasks() {
+            document.querySelectorAll('.kanban-column').forEach(column => {
+                const status = column.dataset.status;
+                const container = column.querySelector('.tasks-container');
+                const statusTasks = tasks.filter(t => t.status === status);
+                
+                container.innerHTML = statusTasks.map(task => `
+                    <div class="task-card" draggable="true" data-id="${task.id}">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-description">${task.description || ''}</div>
+                        <div class="task-tags">
+                            <span class="tag tag-${task.project}">${task.project}</span>
+                        </div>
+                    </div>
+                `).join('');
+
+                column.querySelector('.column-count').textContent = statusTasks.length;
+            });
+
+            setupDragAndDrop();
+            saveTasks();
+        }
+
+        function setupDragAndDrop() {
+            document.querySelectorAll('.task-card').forEach(card => {
+                card.addEventListener('dragstart', (e) => {
+                    e.target.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', e.target.dataset.id);
+                });
+                card.addEventListener('dragend', (e) => {
+                    e.target.classList.remove('dragging');
+                });
+            });
+
+            document.querySelectorAll('.kanban-column').forEach(column => {
+                column.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                });
+                column.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const taskId = e.dataTransfer.getData('text/plain');
+                    const newStatus = column.dataset.status;
+                    tasks = tasks.map(t => t.id == taskId ? { ...t, status: newStatus } : t);
+                    renderTasks();
+                });
+            });
+        }
+
+        function openTaskModal(status = 'backlog', taskId = null) {
+            const modal = document.getElementById('task-modal');
+            const form = document.getElementById('task-form');
+            
+            if (taskId) {
+                const task = tasks.find(t => t.id == taskId);
+                document.getElementById('modal-title').textContent = 'Edit Task';
+                document.getElementById('task-id').value = task.id;
+                document.getElementById('task-title').value = task.title;
+                document.getElementById('task-description').value = task.description || '';
+                document.getElementById('task-project').value = task.project;
+                document.getElementById('task-status').value = task.status;
+            } else {
+                document.getElementById('modal-title').textContent = 'Add New Task';
+                form.reset();
+                document.getElementById('task-id').value = '';
+                document.getElementById('task-status').value = status;
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeTaskModal() {
+            document.getElementById('task-modal').classList.remove('active');
+        }
+
+        document.getElementById('task-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('task-id').value;
+            const taskData = {
+                title: document.getElementById('task-title').value,
+                description: document.getElementById('task-description').value,
+                project: document.getElementById('task-project').value,
+                status: document.getElementById('task-status').value
+            };
+
+            if (id) {
+                tasks = tasks.map(t => t.id == id ? { ...t, ...taskData } : t);
+            } else {
+                tasks.push({ id: Date.now(), ...taskData });
+            }
+
+            renderTasks();
+            closeTaskModal();
+        });
+
+        function saveTasks() {
+            localStorage.setItem('mc-tasks', JSON.stringify(tasks));
+        }
+
+        // Calendar Functions
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            const title = document.getElementById('calendar-title');
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                          'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            const today = new Date();
+            
+            if (calendarView === 'week') {
+                // Week view - show current week
+                const startOfWeek = new Date(today);
+                startOfWeek.setDate(today.getDate() - today.getDay());
+                
+                const endOfWeek = new Date(startOfWeek);
+                endOfWeek.setDate(startOfWeek.getDate() + 6);
+                
+                title.textContent = `${months[startOfWeek.getMonth()]} ${startOfWeek.getDate()} - ${endOfWeek.getDate()}, ${startOfWeek.getFullYear()}`;
+                
+                let html = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => 
+                    `<div class="calendar-day-header">${d}</div>`
+                ).join('');
+                
+                for (let i = 0; i < 7; i++) {
+                    const currentDate = new Date(startOfWeek);
+                    currentDate.setDate(startOfWeek.getDate() + i);
+                    const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+                    const dayTasks = calendarTasks.filter(t => t.date === dateStr || t.recurring);
+                    const isToday = currentDate.toDateString() === today.toDateString();
+                    
+                    html += `
+                        <div class="calendar-day ${isToday ? 'today' : ''}">
+                            <div class="day-number">${currentDate.getDate()}</div>
+                            <div class="day-tasks">
+                                ${dayTasks.map(t => `
+                                    <div class="day-task priority-${t.priority}">${t.recurring ? '🔄 ' : ''}${t.title}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                grid.innerHTML = html;
+                return;
+            }
+            
+            // Month view (original)
+            title.textContent = `${months[currentMonth]} ${currentYear}`;
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+            
+            const isCurrentMonth = today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+
+            let html = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => 
+                `<div class="calendar-day-header">${d}</div>`
+            ).join('');
+
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                html += `<div class="calendar-day other-month"><div class="day-number">${daysInPrevMonth - i}</div></div>`;
+            }
+
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayTasks = calendarTasks.filter(t => t.date === dateStr || t.recurring);
+                const isToday = isCurrentMonth && day === today.getDate();
+                
+                html += `
+                    <div class="calendar-day ${isToday ? 'today' : ''}">
+                        <div class="day-number">${day}</div>
+                        <div class="day-tasks">
+                            ${dayTasks.map(t => `
+                                <div class="day-task priority-${t.priority}">${t.recurring ? '🔄 ' : ''}${t.title}</div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Next month days
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = 7 - (totalCells % 7);
+            if (remainingCells < 7) {
+                for (let i = 1; i <= remainingCells; i++) {
+                    html += `<div class="calendar-day other-month"><div class="day-number">${i}</div></div>`;
+                }
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function changeMonth(delta) {
+            if (calendarView === 'week') {
+                // Move by week in week view
+                const today = new Date();
+                today.setDate(today.getDate() + (delta * 7));
+                currentMonth = today.getMonth();
+                currentYear = today.getFullYear();
+            } else {
+                // Move by month in month view
+                if (delta === 0) {
+                    currentMonth = new Date().getMonth();
+                    currentYear = new Date().getFullYear();
+                } else {
+                    currentMonth += delta;
+                    if (currentMonth > 11) {
+                        currentMonth = 0;
+                        currentYear++;
+                    } else if (currentMonth < 0) {
+                        currentMonth = 11;
+                        currentYear--;
+                    }
+                }
+            }
+            renderCalendar();
+        }
+
+        function toggleCalendarView() {
+            calendarView = calendarView === 'month' ? 'week' : 'month';
+            document.getElementById('view-toggle').textContent = calendarView === 'month' ? 'Week' : 'Month';
+            
+            const grid = document.getElementById('calendar-grid');
+            if (calendarView === 'week') {
+                grid.classList.add('calendar-view-week');
+            } else {
+                grid.classList.remove('calendar-view-week');
+            }
+            
+            renderCalendar();
+        }
+
+        // Team Functions
+        function renderTeam() {
+            const grid = document.getElementById('team-grid');
+            grid.innerHTML = teamMembers.map(member => `
+                <div class="team-member-card ${member.isCaptain ? 'captain' : ''} ${member.name === 'LT' ? 'lt' : ''} ${member.name === 'Chief' ? 'chief' : ''} ${member.name === 'Warrant' ? 'warrant' : ''} ${member.name === '1st Class' ? '1st-class' : ''} ${member.name === 'Gunner' ? 'gunner' : ''} ${member.name === 'Deckhand' ? 'deckhand' : ''}">
+                    <div class="member-avatar ${member.name === 'LT' ? 'diver' : ''} ${member.name === 'Gunner' ? 'camo' : ''} ${member.name === 'Deckhand' ? 'jolly-roger' : ''} ${member.name === 'Warrant' ? 'anchor' : ''} ${member.isCaptain ? 'captain' : ''}" ${!member.isCaptain && member.name !== 'LT' && member.name !== 'Gunner' && member.name !== 'Deckhand' && member.name !== 'Warrant' ? `style="background: linear-gradient(135deg, var(--accent), #a855f7);"` : ''}>${!member.isCaptain && member.name !== 'LT' && member.name !== 'Gunner' && member.name !== 'Deckhand' && member.name !== 'Warrant' ? member.emoji : ''}</div>
+                    <div class="member-name">${member.name}</div>
+                    <div class="member-role">${member.role}</div>
+                    <div class="member-description">${member.description}</div>
+                    <div class="member-activity">
+                        <span class="activity-icon">📡</span>
+                        <span class="activity-text">${member.activity || 'Ready'}</span>
+                    </div>
+                    <div class="member-status">
+                        <span class="status-dot"></span>
+                        Active
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Systems Functions
+        let systemsData = [];
+
+        async function refreshSystems() {
+            const grid = document.getElementById('systems-grid');
+            grid.innerHTML = '<div class="system-card"><p>Loading system data...</p></div>';
+            
+            try {
+                const response = await fetch('/systems.json?v=' + Date.now());
+                const data = await response.json();
+                
+                const diskPercent = data.disk.percent;
+                
+                systemsData = [
+                    {
+                        name: 'Disk Usage',
+                        status: diskPercent > 90 ? 'error' : diskPercent > 75 ? 'warning' : 'healthy',
+                        metrics: [
+                            { label: 'Total', value: data.disk.total },
+                            { label: 'Used', value: data.disk.used },
+                            { label: 'Available', value: data.disk.available },
+                            { label: 'Usage', value: diskPercent + '%', isPercent: true }
+                        ]
+                    },
+                    {
+                        name: 'Memory',
+                        status: data.memory.active > 8000 ? 'error' : data.memory.active > 6000 ? 'warning' : 'healthy',
+                        metrics: [
+                            { label: 'Total', value: data.memory.total },
+                            { label: 'Active Pages', value: data.memory.active }
+                        ]
+                    },
+                    {
+                        name: 'Cron Jobs',
+                        status: 'healthy',
+                        total: data.cron.jobsEnabled,
+                        jobs: data.cron.jobs || []
+                    },
+                    {
+                        name: 'OpenClaw',
+                        status: data.openclaw.gateway === 'running' ? 'healthy' : 'warning',
+                        metrics: [
+                            { label: 'Gateway', value: data.openclaw.gateway },
+                            { label: 'Version', value: data.openclaw.version }
+                        ],
+                        llms: data.openclaw.llms || []
+                    }
+                ];
+                
+                renderSystems();
+            } catch (err) {
+                grid.innerHTML = `<div class="system-card status-error"><p>Error loading systems: ${err.message}</p></div>`;
+            }
+        }
+
+        function renderSystems() {
+            const grid = document.getElementById('systems-grid');
+            grid.innerHTML = systemsData.map(system => `
+                <div class="system-card status-${system.status}">
+                    <div class="system-header">
+                        <span class="system-name">${system.name}</span>
+                        <span class="system-status">${system.status.toUpperCase()}</span>
+                    </div>
+                    ${system.jobs && system.jobs.length > 0 ? `
+                        <div class="system-metric">
+                            <span class="system-metric-label">Total Jobs</span>
+                            <span class="system-metric-value">${system.total}</span>
+                        </div>
+                        <div class="cron-jobs-list">
+                            ${system.jobs.map(job => `
+                                <div class="cron-job-item">
+                                    <div class="cron-job-name">${job.name}</div>
+                                    <div class="cron-job-details">${job.time} → ${job.target}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    ${system.metrics ? system.metrics.map(m => `
+                        <div class="system-metric">
+                            <span class="system-metric-label">${m.label}</span>
+                            <span class="system-metric-value">${m.value}</span>
+                        </div>
+                        ${m.isPercent ? `
+                        <div class="progress-bar">
+                            <div class="progress-fill ${system.status}" style="width: ${m.value}"></div>
+                        </div>
+                        ` : ''}
+                    `).join('') : ''}
+                    ${system.llms && system.llms.length > 0 ? `
+                        <div class="llms-list" style="margin-top: 0.75rem; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+                            ${system.llms.map(llm => `
+                                <div class="llm-item" style="display: flex; justify-content: space-between; padding: 0.3rem 0;">
+                                    <span class="llm-name" style="font-size: 0.85rem; font-weight: 600; color: var(--accent);">${llm.name}</span>
+                                    <span class="llm-provider" style="font-size: 0.75rem; color: var(--text-secondary);">${llm.provider}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        renderTasks();
+        renderCalendar();
+        renderTeam();
+        
+        // Load tasks from JSON
+        loadTasks();
+        
+        // Load notes
+        loadNotes();
+        
+        // Update lunar data
+        updateLunar();
+        updateWaterLevels();
+        
+        // Load systems when tab is clicked
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.dataset.tab === 'systems') {
+                    refreshSystems();
+                }
+            });
+        });
+
+        // Close modal on outside click
+        document.getElementById('task-modal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeTaskModal();
+            }
+        });
+    
+        // Linear Issues
+        const LINEAR_API_KEY = 'lin_api_u7B8A9Bkc9Txda7UptAIHvZydCsfavuAcCRzGKVp';
+        async function refreshLinearIssues() {
+            const btn = document.getElementById('linear-refresh-btn');
+            if (!btn) return;
+            btn.textContent = 'Loading...';
+            btn.disabled = true;
+            try {
+                const res = await fetch('https://api.linear.app/graphql', {
+                    method: 'POST',
+                    headers: { 'Authorization': LINEAR_API_KEY, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: '{ viewer { workspace { issues(first:50) { nodes { id identifier title state { name type } assignee { name } url } } } }' })
+                });
+                const json = await res.json();
+                if (json.errors) throw new Error(json.errors[0].message);
+                const issues = json.data.viewer.workspace.issues.nodes || [];
+                document.getElementById('linear-stats').textContent = issues.length + ' issues';
+                var map = { 'backlog':'Backlog', 'triage':'Todo', 'todo':'Todo', 'in_progress':'In Progress', 'completed':'Done' };
+                ['Backlog','Todo','In Progress','Done'].forEach(function(s) {
+                    var el = document.getElementById('issues-' + s.toLowerCase().replace(' ',''));
+                    var cnt = document.getElementById('count-' + s.toLowerCase().replace(' ',''));
+                    var filtered = issues.filter(function(i) { return (map[i.state.type] || i.state.name) === s; });
+                    if (cnt) cnt.textContent = filtered.length;
+                    if (el) el.innerHTML = filtered.length === 0 ? 'No issues' : filtered.map(function(i) { return '<div class="issue-card"><div class="issue-title">' + i.identifier + ' - ' + i.title + '</div><div class="issue-meta">' + (i.assignee && i.assignee.name || 'Unassigned') + '</div></div>'; }).join('');
+                });
+            } catch(e) { document.getElementById('linear-stats').textContent = 'Error: ' + e.message; }
+            btn.textContent = 'Refresh';
+            btn.disabled = false;
+        }
+        document.querySelectorAll('.tab-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                if (btn.dataset.tab === 'linear') setTimeout(refreshLinearIssues, 150);
+            });
+        });
+    </script>
+</body>
+</html>
