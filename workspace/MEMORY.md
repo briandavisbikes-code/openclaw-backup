@@ -90,13 +90,21 @@ Script: `/Users/bro/morning-brief-final.sh`
 - channels.discord.commands.native.no_allowlists
 
 **Discord:** Token in openclaw.json; `groupPolicy: "allowlist"` with guild 1479511210503442442
-**#captain channel:** 1479511212273172685 (requireMention: false)
-**#hermes_vc:** 1498872063178575914
+**Discord channels (all in guild 1479511210503442442):**
+| Channel | ID | Require Mention |
+|---------|-------|----------------|
+| #captain | 1479511212273172685 | No |
+| #hermes_vc | 1498872063178575914 | Yes |
+| #truckpedia_net | 1481132765280735232 | No |
+| #monitoring | 1481420244156153857 | No |
+| #mission-control | 1481132467686477844 | No |
+| #network-fc | 1482611648756977694 | No |
+| #autobiography | 1491833052870217850 | No |
 **Secrets:** ~/.openclaw/openclaw.env
 
 ## Technical Stack
 
-- **Gateway:** OpenClaw 2026.5.2 — Discord is separate npm package `@openclaw/discord`
+- **Gateway:** OpenClaw 2026.5.3-1 — Discord is separate npm package `@openclaw/discord`
 - **Node:** v25.8.0 | **macOS:** 26.3.1 (arm64)
 - **Platform:** Mac Mini, 15GB RAM
 
@@ -111,11 +119,12 @@ Script: `/Users/bro/morning-brief-final.sh`
 - Destructive actions require Commander approval
 
 ## Known Fixes Applied
-
+**Known Fixes Applied**
 - - **Discord (2026-04-15):** phi3 context too small → switched to MiniMax
 **Discord delivery queue (2026-05-03):** "Invalid Form Body" on 17 deliveries — all `to: "channel:captain"` couldn't resolve alias to numeric ID. Workaround: replaced with `channel:1479511212273172685` in queue files. Root cause unfixed — see `issues/2026-05-03-discord-alias-resolution.md`
 - **Gunner alerts (2026-04-17):** CoinGecko rate limits → Kraken via CCXT
 - **Auto-update (2026-05-03):** Removed 15-min auto-update-check cron that was breaking plugins
+- **Discord silent drop (2026-05-04):** MiniMax-M2.7 `reasoning: true` caused `[[reply_to_current]]` to be pushed past first-token position → responses dropped silently. Fix: `reasoning: false` in both openclaw.json and agents/main/agent/models.json. See `memory/hermes-oversight.md` for full details.
 
 ## DO NOT AUTO-UPDATE OPENCLAW
 
