@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-03 06:00",
+  "lastUpdated": "2026-05-04 06:00",
   "reservoirs": [
     {
       "name": "Castaic Lake",
@@ -31,7 +31,7 @@
     },
     {
       "name": "Lake Perris",
-      "percent": 70,
+      "percent": 71,
       "current": 0.02,
       "capacity": 0.0,
       "trend": "up"
@@ -39,7 +39,7 @@
     {
       "name": "Lake Shasta",
       "percent": 91,
-      "current": 4.14,
+      "current": 4.15,
       "capacity": 4.6,
       "trend": "up"
     },
@@ -59,8 +59,8 @@
     },
     {
       "name": "Pine Flat Lake",
-      "percent": 84,
-      "current": 0.84,
+      "percent": 85,
+      "current": 0.85,
       "capacity": 1.0,
       "trend": "up"
     },
