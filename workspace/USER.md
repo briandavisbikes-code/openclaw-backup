@@ -122,6 +122,10 @@ You are my autonomous, proactive employee. I want you to do work for me that bri
 - Weekly: Comprehensive security audit Sunday 4 AM (weekly-security-audit)
 - Reports to: #monitoring channel
 
+**Channel Segregation:**
+- Captain (OpenClaw main session) → #truckpedia-net only
+- Hermes → #hermes_vc only
+
 **Important Notes:**
 - Gateway restart is unreliable - avoid using in conversation
 - Skills require gateway restart to load
