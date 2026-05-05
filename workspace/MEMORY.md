@@ -139,3 +139,18 @@ Updates can break Discord plugin and channel configs. Only update manually when 
 - **Inbox Status:** Clean — no new messages to act on. [score=0.887 recalls=0 avg=0.620 source=memory/2026-04-27.md:14-14]
 <!-- openclaw-memory-promotion:memory:memory/2026-04-27.md:16:16 -->
 - **Notes:** [score=0.887 recalls=0 avg=0.620 source=memory/2026-04-27.md:16-16]
+
+## Promoted From Short-Term Memory (2026-05-05)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-04-14.md:156:178 -->
+- ## TruckPedia Data Quality Completion (April 9-13, 2026) - **Database growth**: 27,750 → 28,677 trucks (+927 trucks) - **Data quality audit**: Identified and fixed all major gaps: - **Horsepower (HP)**: 724 missing → 100% complete (HP_DATA table expansion) - **Towing/Payload/CurbWeight**: 148 missing → 100% complete (Deckhand task) - **Country of Origin**: 274 "Unknown" → 100% complete (Jeep, Roush, Suzuki, etc.) - **Torque**: 2,036 missing (7.2%) — Commander directive: ignore - **Accuracy claim updated**: Website now shows "97%+ data accuracy" (was 92%+) - **Country count honesty**: Changed from "70+ countries" to "10 countries" (USA, Japan, China, South Korea, India, Australia, Germany, France, UK, Italy) - **Landing page updates**: - Truck count updated to 28,677 - Hero badge: "28,677 trucks, 10 countries and growing • 1940–2026" - Pricing card text: "For apps and larger projects" - **Subagent delegation success**: Deckhand handled HP fill and country fix tasks efficiently - **Nightly expansion**: Now adds ~50-100 trucks nightly (down from 150-400 as database matures) - **System health**: All cron jobs running, data synced to GCP VM, MEMORY.md updated ## LT Market Scan - 2026-04-14 08:30 AM - **Trigger**: Cron lt-market-scan (38f941e7-00e6-41a8-a89b-703f05841037) - **Coins scanned**: NEAR, LINK, AVAX, MNT, ALGO, KAS, VET - **Data source**: OKX (NEAR, LINK, AVAX, ALGO) + Gate.io (MNT, KAS, VET) - **Dip from 24h high**: NEAR -3.7%, LINK -3.4%, AVAX -3.7%, MNT -2.1%, ALGO -4.4%, KAS -2.4%, VET -1.4% - **Buy zone status**: No coins met 5-15% dip threshold [score=0.880 recalls=5 avg=0.486 source=memory/2026-04-14.md:156-178]
+<!-- openclaw-memory-promotion:memory:memory/2026-04-28.md:10:10 -->
+- **Note:** LINK, AVAX, ALGO returning None for 'last' price on Kraken despite having bid/ask data. Market appears to have zero volume. May need to switch to alternative exchange (Binance/Coinbase) for these if problem persists. [score=0.873 recalls=0 avg=0.620 source=memory/2026-04-28.md:10-10]
+<!-- openclaw-memory-promotion:memory:memory/2026-04-28.md:12:12 -->
+- **Coins scanned:** NEAR, LINK, AVAX, MNT, ALGO, KAS, VET (+ FLR, XLM, HBAR, SEI, CRO) [score=0.873 recalls=0 avg=0.620 source=memory/2026-04-28.md:12-12]
+<!-- openclaw-memory-promotion:memory:memory/2026-04-28.md:14:14 -->
+- **Results:** No buy signals. All coins within normal ranges. [score=0.873 recalls=0 avg=0.620 source=memory/2026-04-28.md:14-14]
+<!-- openclaw-memory-promotion:memory:memory/2026-04-28.md:16:19 -->
+- | Coin | Price | 24h Change | |------|-------|------------| | NEAR | $1.3390 | ~0% | | KAS | $0.0326 | ~0% | [score=0.873 recalls=0 avg=0.620 source=memory/2026-04-28.md:16-19]
+<!-- openclaw-memory-promotion:memory:memory/2026-04-28.md:20:23 -->
+- | VET | $0.0071 | ~0% | | FLR | $0.0076 | ~0% | | XLM | $0.1624 | ~0% | | HBAR | $0.0889 | ~0% | [score=0.873 recalls=0 avg=0.620 source=memory/2026-04-28.md:20-23]
