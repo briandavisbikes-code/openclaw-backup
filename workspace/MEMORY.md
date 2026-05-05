@@ -8,18 +8,19 @@ _Last updated: 2026-05-04_
 - Affirmations: different styles each time, no repeated phrases
 - **Channel segregation:** #truckpedia-net → TruckPedia only; #captain → everything else
 
-## Active Crons (2026-05-03)
+## Active Crons (2026-05-04)
 
 | Cron | Time | Task | Status |
 |------|------|------|--------|
-| morning-brief | 8 AM daily | Morning brief | Script |
+| morning-brief | 8 AM daily | Morning brief + Gunner crypto (Binance.US) | Script |
 | daily-maintenance | 4 AM daily | Maintenance | Script |
-| daily-backup | 4:30 AM daily | GitHub backup | Script |
+| local-backup | 2:15 AM daily | Local backup to /Volumes/Untitled (HDD) | Script ✅ |
+| github-backup | 2:30 AM daily | GitHub push to briandavisbikes-code/openclaw-backup | Script ✅ (new) |
 | daily-affirmation-davina | 8:30 AM daily | Email to Davina | Script |
-| team-self-improve (Hermes) | 8 PM daily | Self-improvement | Cron→#hermes_vc |
+| team-self-improve (Hermes) | 8 PM daily | Self-improvement | Cron→#captain |
 | weekly-jessica-email | Monday 8 AM | Email to Jessica | Script |
 
-Note: Several old crons (lt-market-scan, truck-expansion, agentmail-*, gunner-alerts) have delivery errors — not actively running.
+Note: Several old crons (lt-market-scan, agentmail-*) have delivery errors — not actively running.
 
 ## Cost Management
 
