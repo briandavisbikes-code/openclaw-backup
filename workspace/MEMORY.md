@@ -174,3 +174,12 @@ Updates can break Discord plugin and channel configs. Only update manually when 
 - | Coin | Price | 24h Change | |------|-------|------------| | NEAR | $1.3390 | ~0% | | KAS | $0.0326 | ~0% | [score=0.873 recalls=0 avg=0.620 source=memory/2026-04-28.md:16-19]
 <!-- openclaw-memory-promotion:memory:memory/2026-04-28.md:20:23 -->
 - | VET | $0.0071 | ~0% | | FLR | $0.0076 | ~0% | | XLM | $0.1624 | ~0% | | HBAR | $0.0889 | ~0% | [score=0.873 recalls=0 avg=0.620 source=memory/2026-04-28.md:20-23]
+
+## Promoted From Short-Term Memory (2026-05-06)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-04-29.md:5:5 -->
+- **Commander's Direction:** [score=0.871 recalls=0 avg=0.620 source=memory/2026-04-29.md:5-5]
+<!-- openclaw-memory-promotion:memory:memory/2026-04-29.md:10:10 -->
+- **Actions Taken:** [score=0.871 recalls=0 avg=0.620 source=memory/2026-04-29.md:10-10]
+<!-- openclaw-memory-promotion:memory:memory/2026-04-29.md:15:15 -->
+- **Current State:** [score=0.871 recalls=0 avg=0.620 source=memory/2026-04-29.md:15-15]
