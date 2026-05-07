@@ -47,11 +47,13 @@ Script: `/Users/bro/morning-brief-final.sh`
 
 ## TruckPedia
 
-- **Status:** ✅ Production — GCP VM 34.127.119.128, nginx + Let's Encrypt SSL
-- **Database:** 36,078 trucks (2026-05-04)
+- **Status:** ✅ Production — GCP VM 34.83.174.209, nginx + Let's Encrypt SSL
+- **Database:** 36,878 trucks (2026-05-05)
 - **URL:** https://api.truckpedia.net | https://www.truckpedia.net
 - **Stripe:** Basic $9.99/mo, Pro $19.99/mo (webhook configured)
 - **Data quality:** HP gaps resolved, minor torque gaps (ignore)
+- **Cloudflare Tunnel:** api.truckpedia.net uses CFargo CNAME (truckpedia-api tunnel); truckpedia.net uses A record to VM IP (DNS only) — root apex cannot use proxied tunnel CNAME
+- **VM IP changed:** 34.127.119.128 → 34.83.174.209 (2026-05-05)
 
 ## Mission Control
 
@@ -183,3 +185,31 @@ Updates can break Discord plugin and channel configs. Only update manually when 
 - **Actions Taken:** [score=0.871 recalls=0 avg=0.620 source=memory/2026-04-29.md:10-10]
 <!-- openclaw-memory-promotion:memory:memory/2026-04-29.md:15:15 -->
 - **Current State:** [score=0.871 recalls=0 avg=0.620 source=memory/2026-04-29.md:15-15]
+
+## Team Operating Agreement (2026-05-06)
+
+**Commander's directive:** Efficient execution. Plan first, execute methodically. No looping.
+
+**Roles:**
+- Commander (Brian): decisions, priorities
+- Hermes: coordinator, thinker
+- LT: logistics advisor — challenges plans, flags loops
+- Deckhand: executor — runs commands, reports exactly
+
+**Operating rules:**
+1. Plan first — gather facts → consult LT → present numbered plan → execute
+2. One step at a time — report results before moving on
+3. No looping — after 3 failed steps, stop and reassess
+4. Delegate hands-on work to Deckhand
+
+**Files:**
+- TEAM.md: workspace/TEAM.md
+- TruckPedia runbook: memory/truckpedia-runbook.md
+- Systematic debugging: skills/systematic-debugging.md
+
+## TruckPedia Fixes Applied (2026-05-06)
+
+- www.truckpedia.net: now A record → 8.231.130.173 (DNS-only, NOT tunnel)
+- tunnel hostname route for www: DELETED (caused Error 1016)
+- api.truckpedia.net: CNAME → truckpedia-api tunnel (proxied)
+- Health check cron: 8 AM daily → this channel
