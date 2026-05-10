@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-08 06:00",
+  "lastUpdated": "2026-05-09 06:00",
   "reservoirs": [
     {
       "name": "Castaic Lake",
@@ -10,7 +10,7 @@
     },
     {
       "name": "Folsom Lake",
-      "percent": 97,
+      "percent": 98,
       "current": 0.95,
       "capacity": 1.0,
       "trend": "up"
@@ -46,7 +46,7 @@
     {
       "name": "Lake Shasta",
       "percent": 91,
-      "current": 4.16,
+      "current": 4.15,
       "capacity": 4.6,
       "trend": "up"
     },
@@ -74,7 +74,7 @@
     {
       "name": "San Luis Reservoir",
       "percent": 83,
-      "current": 1.7,
+      "current": 1.69,
       "capacity": 2.0,
       "trend": "up"
     }
