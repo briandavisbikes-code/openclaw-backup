@@ -83,3 +83,8 @@ Updates can break Discord plugin. Only update manually. Commander directive (202
 
 - Gateway: OpenClaw 2026.5.3-1 | Node v25.8.0 | macOS 26.3.1 | Mac Mini 15GB RAM
 - GitHub: briandavisbikes-code | AgentMail: productionx@agentmail.to
+
+## Promoted From Short-Term Memory (2026-05-10)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-05-04.md:4:4 -->
+- **Problem:** GCP VM 34.127.119.128 went down. SSH timeout from Mac, ICMP timeout, Cloudflare 522. [score=0.869 recalls=0 avg=0.620 source=memory/2026-05-04.md:4-4]
