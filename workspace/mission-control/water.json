@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-05-09 06:00",
+  "lastUpdated": "2026-05-10 06:00",
   "reservoirs": [
     {
       "name": "Castaic Lake",
-      "percent": 86,
+      "percent": 87,
       "current": 0.28,
       "capacity": 0.3,
       "trend": "up"
@@ -11,7 +11,7 @@
     {
       "name": "Folsom Lake",
       "percent": 98,
-      "current": 0.95,
+      "current": 0.96,
       "capacity": 1.0,
       "trend": "up"
     },
@@ -23,22 +23,15 @@
       "trend": "up"
     },
     {
-      "name": "Lake Don Pedro",
-      "percent": 92,
-      "current": 1.87,
-      "capacity": 2.0,
-      "trend": "up"
-    },
-    {
       "name": "Lake Oroville",
       "percent": 98,
-      "current": 3.36,
+      "current": 3.37,
       "capacity": 3.4,
       "trend": "up"
     },
     {
       "name": "Lake Perris",
-      "percent": 74,
+      "percent": 75,
       "current": 0.02,
       "capacity": 0.0,
       "trend": "up"
@@ -59,7 +52,7 @@
     },
     {
       "name": "Millerton Lake",
-      "percent": 91,
+      "percent": 92,
       "current": 0.48,
       "capacity": 0.5,
       "trend": "up"
@@ -73,8 +66,8 @@
     },
     {
       "name": "San Luis Reservoir",
-      "percent": 83,
-      "current": 1.69,
+      "percent": 82,
+      "current": 1.68,
       "capacity": 2.0,
       "trend": "up"
     }

@@ -67,7 +67,7 @@ _Last updated: 2026-05-07_
 - Discord delivery queue (2026-05-03): `channel:1479511212273172685` numeric ID workaround
 - Discord silent drop (2025-05-04): `reasoning: true` caused silent drops → `reasoning: false`
 - Hermes free_response_channels: Removed #cap to stop intercepting
-- OpenClaw #cap: threadBindings=disabled, requireMention=false
+- OpenClaw #cap: threadBindings=disabled, requireMention=true (was false, broken since 5.2, not fixed in 5.7)
 
 ## DO NOT AUTO-UPDATE OPENCLAW
 
@@ -81,7 +81,7 @@ Updates can break Discord plugin. Only update manually. Commander directive (202
 
 ## Technical
 
-- Gateway: OpenClaw 2026.5.3-1 | Node v25.8.0 | macOS 26.3.1 | Mac Mini 15GB RAM
+- Gateway: OpenClaw 2026.5.7-1 | Node v25.8.0 | macOS 26.3.1 | Mac Mini 15GB RAM
 - GitHub: briandavisbikes-code | AgentMail: productionx@agentmail.to
 
 ## Promoted From Short-Term Memory (2026-05-10)
