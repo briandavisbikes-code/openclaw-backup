@@ -88,3 +88,14 @@ Updates can break Discord plugin. Only update manually. Commander directive (202
 
 <!-- openclaw-memory-promotion:memory:memory/2026-05-04.md:4:4 -->
 - **Problem:** GCP VM 34.127.119.128 went down. SSH timeout from Mac, ICMP timeout, Cloudflare 522. [score=0.869 recalls=0 avg=0.620 source=memory/2026-05-04.md:4-4]
+
+## Promoted From Short-Term Memory (2026-05-11)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-05-04.md:15:15 -->
+- **Download URL (public):** `https://raw.githubusercontent.com/briandavisbikes-code/truckpedia-data/main/trucks.json` [score=0.896 recalls=0 avg=0.620 source=memory/2026-05-04.md:15-15]
+<!-- openclaw-memory-promotion:memory:memory/2026-05-04.md:17:17 -->
+- **Upload:** Created new public repo `truckpedia-data` with 36,078 trucks (14.8MB JSONL) [score=0.896 recalls=0 avg=0.620 source=memory/2026-05-04.md:17-17]
+<!-- openclaw-memory-promotion:memory:memory/2026-05-04.md:19:19 -->
+- **Channel:** Commander confirmed - I (Captain) only respond in #truckpedia-net, Hermes stays in #hermes_vc [score=0.896 recalls=0 avg=0.620 source=memory/2026-05-04.md:19-19]
+<!-- openclaw-memory-promotion:memory:memory/2026-05-04.md:23:23 -->
+- **TruckPedia VM (34.127.119.128) Status:** [score=0.886 recalls=0 avg=0.620 source=memory/2026-05-04.md:23-23]
