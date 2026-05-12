@@ -1445,7 +1445,6 @@
     </header>
 
     <nav class="tabs">
-        <button class="tab-btn active" data-tab="kanban">📋 Kanban</button>
         <button class="tab-btn" data-tab="team">👥 Team</button>
         <button class="tab-btn" data-tab="systems">💻 Systems</button>
         <button class="tab-btn" data-tab="cron">⏰ Cron Jobs</button>
@@ -1637,39 +1636,7 @@
         </div>
     </div>
 
-    <!-- Kanban Tab -->
-    <div class="tab-content" id="kanban">
-        <div class="kanban-header">
-            <h2>📋 Kanban Board</h2>
-            <button class="btn btn-refresh" onclick="loadTasks()">🔄 Refresh</button>
-        </div>
-        <div class="kanban-board">
-            <div class="kanban-column" data-status="todo">
-                <div class="column-header">
-                    <h3>To Do</h3>
-                    <span class="column-count">0</span>
-                </div>
-                <div class="tasks-container"></div>
-                <button class="add-task-btn" onclick="openTaskModal('todo')">+ Add Task</button>
-            </div>
-            <div class="kanban-column" data-status="in-progress">
-                <div class="column-header">
-                    <h3>In Progress</h3>
-                    <span class="column-count">0</span>
-                </div>
-                <div class="tasks-container"></div>
-                <button class="add-task-btn" onclick="openTaskModal('in-progress')">+ Add Task</button>
-            </div>
-            <div class="kanban-column" data-status="done">
-                <div class="column-header">
-                    <h3>Done</h3>
-                    <span class="column-count">0</span>
-                </div>
-                <div class="tasks-container"></div>
-                <button class="add-task-btn" onclick="openTaskModal('done')">+ Add Task</button>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Team Tab -->
     <div class="tab-content" id="team">
@@ -1972,16 +1939,7 @@
             } catch (error) {
                 console.error('Error loading tasks:', error);
                 // Fallback to default tasks
-                tasks = [
-                    { id: 1, title: 'Database Build', description: 'Build truck database (1940-2025, US/Asia/Europe)', project: 'truckpedia', status: 'in-progress' },
-                    { id: 2, title: 'Ford F-Series Data', description: 'Add all years and trims for F-150/F-250/F-350', project: 'truckpedia', status: 'in-progress' },
-                    { id: 3, title: 'Chevy Silverado Data', description: 'Add all years and trims for Silverado', project: 'truckpedia', status: 'todo' },
-                    { id: 4, title: 'Ram 1500 Data', description: 'Add all years and trims for Ram 1500', project: 'truckpedia', status: 'todo' },
-                    { id: 5, title: 'Asian Trucks', description: 'Add Toyota, Honda, Mitsubishi, Isuzu trucks', project: 'truckpedia', status: 'todo' },
-                    { id: 6, title: 'European Trucks', description: 'Add Mercedes, Volvo, MAN, Scania trucks', project: 'truckpedia', status: 'todo' },
-                    { id: 7, title: 'Website Phase 2', description: 'Build website after database complete', project: 'truckpedia', status: 'todo' },
-                    { id: 8, title: 'Research Complete', description: 'Competitor analysis and planning done', project: 'truckpedia', status: 'done' }
-                ];
+                tasks = [];
                 renderTasks();
             }
         }
