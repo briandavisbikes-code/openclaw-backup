@@ -99,3 +99,8 @@ Updates can break Discord plugin. Only update manually. Commander directive (202
 - **Channel:** Commander confirmed - I (Captain) only respond in #truckpedia-net, Hermes stays in #hermes_vc [score=0.896 recalls=0 avg=0.620 source=memory/2026-05-04.md:19-19]
 <!-- openclaw-memory-promotion:memory:memory/2026-05-04.md:23:23 -->
 - **TruckPedia VM (34.127.119.128) Status:** [score=0.886 recalls=0 avg=0.620 source=memory/2026-05-04.md:23-23]
+
+## Promoted From Short-Term Memory (2026-05-12)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-05-05.md:22:25 -->
+- sudo /opt/node/lib/node_modules/pm2/bin/pm2 start /home/your-email/api/ecosystem.config.js [score=0.884 recalls=0 avg=0.620 source=memory/2026-05-05.md:50-51]
