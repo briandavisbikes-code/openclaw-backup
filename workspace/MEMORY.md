@@ -104,3 +104,8 @@ Updates can break Discord plugin. Only update manually. Commander directive (202
 
 <!-- openclaw-memory-promotion:memory:memory/2026-05-05.md:22:25 -->
 - sudo /opt/node/lib/node_modules/pm2/bin/pm2 start /home/your-email/api/ecosystem.config.js [score=0.884 recalls=0 avg=0.620 source=memory/2026-05-05.md:50-51]
+
+## Promoted From Short-Term Memory (2026-05-13)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-04-23.md:1:11 -->
+- ## Truck Database Expansion - 2026-04-23 02:00 AM - Cron job triggered (fbae380f-49e9-4058-983b-97a78eaefd58) - **Initial run:** Only added 50 trucks (TARGET_COUNT=50 bottleneck) - **Fix applied:** Changed TARGET_COUNT from 50 → 400 - **Second run:** Added 400 trucks ✅ - Database: 28,622 → 31,678 trucks - HP fill: 0 (already complete) - JSON export: trucks.json updated (31,678 entries, 14MB) - **⚠️ GCP VM sync broken:** SCP uses placeholder "your-email@" — needs username fix. JSON is available locally. [score=0.877 recalls=5 avg=0.491 source=memory/2026-04-23.md:1-11]
