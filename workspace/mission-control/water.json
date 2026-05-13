@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-11 06:00",
+  "lastUpdated": "2026-05-12 06:00",
   "reservoirs": [
     {
       "name": "Castaic Lake",
@@ -23,15 +23,22 @@
       "trend": "up"
     },
     {
+      "name": "Lake Don Pedro",
+      "percent": 93,
+      "current": 1.9,
+      "capacity": 2.0,
+      "trend": "up"
+    },
+    {
       "name": "Lake Oroville",
-      "percent": 98,
+      "percent": 99,
       "current": 3.37,
       "capacity": 3.4,
       "trend": "up"
     },
     {
       "name": "Lake Perris",
-      "percent": 75,
+      "percent": 76,
       "current": 0.02,
       "capacity": 0.0,
       "trend": "up"
@@ -39,20 +46,20 @@
     {
       "name": "Lake Shasta",
       "percent": 91,
-      "current": 4.14,
+      "current": 4.13,
       "capacity": 4.6,
       "trend": "up"
     },
     {
       "name": "Lake Success",
-      "percent": 78,
+      "percent": 79,
       "current": 0.06,
       "capacity": 0.1,
       "trend": "up"
     },
     {
       "name": "Millerton Lake",
-      "percent": 92,
+      "percent": 93,
       "current": 0.48,
       "capacity": 0.5,
       "trend": "up"
@@ -66,8 +73,8 @@
     },
     {
       "name": "San Luis Reservoir",
-      "percent": 82,
-      "current": 1.67,
+      "percent": 81,
+      "current": 1.66,
       "capacity": 2.0,
       "trend": "up"
     }
