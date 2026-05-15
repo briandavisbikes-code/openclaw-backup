@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-13 06:00",
+  "lastUpdated": "2026-05-14 06:00",
   "reservoirs": [
     {
       "name": "Castaic Lake",
@@ -18,14 +18,14 @@
     {
       "name": "Lake Berryessa",
       "percent": 95,
-      "current": 1.53,
+      "current": 1.52,
       "capacity": 1.6,
       "trend": "up"
     },
     {
       "name": "Lake Don Pedro",
       "percent": 94,
-      "current": 1.9,
+      "current": 1.91,
       "capacity": 2.0,
       "trend": "up"
     },
@@ -38,7 +38,7 @@
     },
     {
       "name": "Lake Perris",
-      "percent": 76,
+      "percent": 77,
       "current": 0.02,
       "capacity": 0.0,
       "trend": "up"
@@ -46,7 +46,7 @@
     {
       "name": "Lake Shasta",
       "percent": 91,
-      "current": 4.13,
+      "current": 4.12,
       "capacity": 4.6,
       "trend": "up"
     },
@@ -66,15 +66,15 @@
     },
     {
       "name": "Pine Flat Lake",
-      "percent": 86,
-      "current": 0.86,
+      "percent": 87,
+      "current": 0.87,
       "capacity": 1.0,
       "trend": "up"
     },
     {
       "name": "San Luis Reservoir",
-      "percent": 81,
-      "current": 1.65,
+      "percent": 80,
+      "current": 1.64,
       "capacity": 2.0,
       "trend": "up"
     }
